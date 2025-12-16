@@ -2,7 +2,7 @@ export default Dashboard;
 
 function Dashboard() {
   return (
-    <div>
+    <div className="dashboard-container">
       <NavBar />
 
       <div className="main-window">
@@ -46,6 +46,7 @@ function Widgets() {
       <h4>Widgets</h4>
       <button className="btn">Rechner</button>
       <button className="btn">Kalendar</button>
+      <button className="btn">Abmelden</button>
     </div>
   );
 }
