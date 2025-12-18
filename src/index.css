@@ -6,14 +6,14 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 1.6rem;
-  font-family: "Inter";
-  color: #081c15;
 }
 
 .App {
   width: 100%;
   height: 100%;
+  font-size: 1.6rem;
+  font-family: "Inter";
+  color: #1b4332;
 }
 /* LOGIN FORM */
 
@@ -103,15 +103,16 @@ a {
 }
 .navigation-bar {
   padding: 0 3rem;
-  background-color: #d8f3dc;
+  /* background-color: #d8f3dc; */
+  background-color: #74c69d;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-.navigation-bar img {
-  width: 10rem;
+.logo-header-footer {
+  width: 12rem;
 }
 
 /* DASHBOARD */
@@ -136,7 +137,9 @@ a {
   width: 15rem;
   height: 100%;
   max-height: calc(100vh - 4rem);
-  background-color: #d8f3dc;
+
+  background-color: #74c69d;
+
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -146,21 +149,74 @@ a {
   padding: 2rem 2rem;
 }
 .side-bar button {
-  padding: 1rem 2rem;
-  border-radius: 4rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+  background-color: #95d5b2;
+  transition: all 0.3;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.side-bar button:hover {
+  transform: scale(1.1);
+}
+.side-bar {
+  opacity: 3;
 }
 .main-dashboard {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  justify-items: center;
   width: 100%;
   margin-left: 2rem;
 }
 .dashboard-info {
-  padding: 2rem 4rem;
+  background-color: #74c69d;
+
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 2;
+  padding: 6rem 6rem;
+
   width: 30rem;
+
   height: fit-content;
-  border: 2px solid black;
+  border: "none";
+  border-radius: 4rem;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.arrivals-dashboard,
+.percentage-dashboard {
+  transform: translate(-30%);
+  transition: all 0.3s;
+}
+.arrivals-dashboard:hover,
+.percentage-dashboard:hover {
+  transform: translate(-30%, -5%);
+}
+
+.checkout-dashboard,
+.free-rooms-dashboard {
+  transform: translate(30%);
+  transition: all 0.3s;
+}
+
+.checkout-dashboard:hover,
+.free-rooms-dashboard:hover {
+  transform: translate(30%, -5%);
+}
+
+/* .free-rooms-dashboard {
+  justify-self: end;
+} */
+
+.numbers {
+  font-size: 4rem;
 }
 .widget-container {
   display: flex;
@@ -169,4 +225,10 @@ a {
 }
 .widget-container :last-child {
   margin-top: 3rem;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

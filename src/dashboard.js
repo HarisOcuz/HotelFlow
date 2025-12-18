@@ -8,6 +8,7 @@ function Dashboard() {
       <div className="main-window">
         <SideBar />
         <MainDashboard />
+        <Footer />
       </div>
     </div>
   );
@@ -18,7 +19,11 @@ function NavBar() {
     <nav className="navigation-bar">
       <h3>Wilkommen zurück Haris</h3>
 
-      <img src="\Hotel_Flow__1_-removebg-preview.png" alt="Logo" />
+      <img
+        className="logo-header-footer"
+        src="\Hotel_Flow__1_-removebg-preview.png"
+        alt="Logo"
+      />
     </nav>
   );
 }
@@ -54,9 +59,47 @@ function Widgets() {
 function MainDashboard() {
   return (
     <div className="main-dashboard">
-      <div className="dashboard-info">
-        <span>Freie/Saubere Zimmer</span>
-      </div>
+      <DashboardSummary
+        className="dashboard-info free-rooms-dashboard"
+        text={"Freie Zimmer"}
+        numbers={41}
+      />
+      <DashboardSummary
+        className="dashboard-info arrivals-dashboard"
+        text={"Heutige Anreisen"}
+        numbers={22}
+      />
+      <DashboardSummary
+        className="dashboard-info checkout-dashboard"
+        text={"Heutige Abreisen"}
+        numbers={16}
+      />
+      <DashboardSummary
+        className="dashboard-info percentage-dashboard"
+        text={"Belegt:"}
+        numbers={"33%"}
+      />
     </div>
+  );
+}
+
+function DashboardSummary({ text, className, numbers }) {
+  return (
+    <div className={className}>
+      <span>{text}</span>
+      <span className="numbers">{numbers}</span>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <img
+        className="logo-header-footer"
+        src="\Hotel_Flow__1_-removebg-preview.png"
+        alt="Logo"
+      />
+    </footer>
   );
 }
