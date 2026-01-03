@@ -55,7 +55,7 @@ function LoginForm() {
   return (
     <form className="login-form" onSubmit={handleLoginSubmit}>
       <img
-        className="logo"
+        className="logo-login"
         src="/Hotel_Flow__1_-removebg-preview.png"
         alt="App Logo"
       />
