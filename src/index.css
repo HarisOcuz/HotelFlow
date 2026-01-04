@@ -373,6 +373,9 @@ a {
 }
 
 .ui-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   position: relative;
   width: 90%;
   height: 90%;
@@ -381,6 +384,12 @@ a {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   border-radius: 4rem;
   padding: 2rem 4rem;
+  overflow: scroll;
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* IE / Edge (stari) */
+  -ms-overflow-style: none;
 }
 
 .icons {
@@ -435,4 +444,28 @@ a {
   height: 30rem;
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+.guest-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4rem;
+
+  padding: 1rem 2rem;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  height: auto;
+  transition: all 0.3s;
+}
+.guest-card:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+}
+.guest-card-short-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.guest-card-open {
+  display: flex;
+  justify-content: ;
 }

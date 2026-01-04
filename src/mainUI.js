@@ -21,17 +21,17 @@ function MainUi() {
         {siteOpen === "" ? (
           <MainWindowShortInfo />
         ) : siteOpen === "Anreisen" ? (
-          <Anreisen />
+          <Arrivals />
         ) : siteOpen === "Abreisen" ? (
-          <Abreisen />
+          <Departures />
         ) : siteOpen === "Im Haus" ? (
-          <ImHaus />
+          <InHaus />
         ) : siteOpen === "Zimmer Management" ? (
-          <ZimmerManagement />
+          <RoomMenagamenet />
         ) : siteOpen === "Mitarbeiter" ? (
-          <Mitarbeiter />
+          <CoWorkers />
         ) : siteOpen === "Verwaltung" ? (
-          <Verwaltung />
+          <Maintance />
         ) : (
           <MainWindowShortInfo />
         )}
@@ -39,6 +39,9 @@ function MainUi() {
     </div>
   );
 }
+
+// SIDEBAR
+
 function SideBar({ onClick }) {
   return (
     <div className="sidebar-container">
@@ -188,9 +191,13 @@ function ListElement({ text, onClick, icon }) {
   );
 }
 
+// NAVBAR
+
 function NavBar() {
   return <div className="navbar-container">Wilkommen zurück Haris</div>;
 }
+
+// SHORT INFO - STATS
 
 function MainWindowShortInfo() {
   return (
@@ -228,15 +235,240 @@ function ShortInfo({ text, nummer, className }) {
   );
 }
 
-function Anreisen() {
+// ARRIVALS
+
+const guests = [
+  {
+    id: 1,
+    firstName: "Haris",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "expedia",
+    adults: 2,
+    children: 1,
+    price: 119,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 2,
+    firstName: "Fatima",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "booking",
+    adults: 1,
+    children: 0,
+    price: 99,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 3,
+    firstName: "Haris",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "expedia",
+    adults: 2,
+    children: 1,
+    price: 119,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 4,
+    firstName: "Fatima",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "booking",
+    adults: 1,
+    children: 0,
+    price: 99,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 5,
+    firstName: "Ali",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "HRS",
+    adults: 2,
+    children: 1,
+    price: 69,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 6,
+    firstName: "Mesa",
+    lastName: "Selimovic",
+    arrivalDate: "20.09.2026",
+    departureDate: "14.10.2026",
+    bookingAgent: "tripadvisor",
+    adults: 1,
+    children: 0,
+    price: 199,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 7,
+    firstName: "Ali",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "HRS",
+    adults: 2,
+    children: 1,
+    price: 69,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 8,
+    firstName: "Mesa",
+    lastName: "Selimovic",
+    arrivalDate: "20.09.2026",
+    departureDate: "14.10.2026",
+    bookingAgent: "tripadvisor",
+    adults: 1,
+    children: 0,
+    price: 199,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 9,
+    firstName: "Ali",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "HRS",
+    adults: 2,
+    children: 1,
+    price: 69,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 10,
+    firstName: "Mesa",
+    lastName: "Selimovic",
+    arrivalDate: "20.09.2026",
+    departureDate: "14.10.2026",
+    bookingAgent: "tripadvisor",
+    adults: 1,
+    children: 0,
+    price: 199,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+];
+
+function Arrivals() {
+  const [isOpen, setIsOpen] = useState(null);
+
+  function handleOnClick(id) {
+    console.log(id);
+    if (isOpen === id) setIsOpen(null);
+    else setIsOpen(id);
+  }
+
   return (
     <div className="ui-container arrivals-container">
-      <h1>Anreisen</h1>
+      {/* <div className="guest-card" onClick={handleOnClick}>
+        <div className="guest-card-short-info">
+          <div>
+            <h3>Haris Ocuz</h3>
+          </div>
+          <div>
+            <h3>20.05.2026</h3>
+            <h3>22.05.2026</h3>
+          </div>
+          <div>
+            <h3>Agent</h3>
+            <h3>expedia</h3>
+          </div>
+          <div>
+            <h3>Preis</h3>
+            <h3>119</h3>
+          </div>
+        </div>
+        {isOpen ? (
+          <div className="guest-card-details">
+            <ul>
+              <li>Erwachsene : 2</li>
+              <li>Kinder : 1</li>
+              <li>Zimmertyp : SDZ</li>
+            </ul>
+            <ul>
+              <li>Zahlungsart : KK</li>
+              <li>Preis : 119€</li>
+            </ul>
+            <button>Check in</button>
+            <button>X</button>
+          </div>
+        ) : null}
+      </div> */}
+      <Guest onClick={handleOnClick} isOpen={isOpen} />
     </div>
   );
 }
 
-function Abreisen() {
+function Guest({ isOpen, onClick }) {
+  return guests.map((guest) => (
+    <div
+      key={guest.id}
+      className="guest-card"
+      onClick={() => onClick(guest.id)}
+    >
+      <div className="guest-card-short-info">
+        <div>
+          <h3>{guest.firstName + " " + guest.lastName}</h3>
+        </div>
+        <div>
+          <h3>{guest.arrivalDate}</h3>
+          <h3>{guest.departureDate}</h3>
+        </div>
+        <div>
+          <h3>Agent</h3>
+          <h3>{guest.bookingAgent}</h3>
+        </div>
+        <div>
+          <h3>Preis</h3>
+          <h3>{guest.price}</h3>
+        </div>
+      </div>
+
+      {/* Prikazivanje detalja ako je isOpen true */}
+      {isOpen === guest.id && (
+        <div className="guest-card-open">
+          <ul>
+            <li>Erwachsene : {guest.adults}</li>
+            <li>Kinder : {guest.children}</li>
+            <li>Zimmertyp : {guest.roomType}</li>
+          </ul>
+          <ul>
+            <li>Zahlungsart : KK</li>
+            <li>Preis : {guest.price}€</li>
+
+            <div>
+              <button>Check in</button>
+              <button>X</button>
+            </div>
+          </ul>
+        </div>
+      )}
+    </div>
+  ));
+}
+
+function Departures() {
   return (
     <div className="ui-container departure-container">
       <h1>Abreisen</h1>
@@ -244,7 +476,7 @@ function Abreisen() {
   );
 }
 
-function ImHaus() {
+function InHaus() {
   return (
     <div className="ui-container in-house-container">
       <h1>Im Haus</h1>
@@ -252,7 +484,7 @@ function ImHaus() {
   );
 }
 
-function ZimmerManagement() {
+function RoomMenagamenet() {
   return (
     <div className="ui-container">
       <h1>Zimmer Management</h1>
@@ -260,7 +492,7 @@ function ZimmerManagement() {
   );
 }
 
-function Mitarbeiter() {
+function CoWorkers() {
   return (
     <div className="ui-container">
       <h1>Mitarbeiter</h1>
@@ -268,7 +500,7 @@ function Mitarbeiter() {
   );
 }
 
-function Verwaltung() {
+function Maintance() {
   return (
     <div className="ui-container">
       <h1>Verwaltung</h1>
