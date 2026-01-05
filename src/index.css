@@ -397,6 +397,12 @@ a {
 }
 .logo-sidebar {
   width: 20rem;
+  transition: all 0.3s;
+}
+.logo-sidebar:hover {
+  cursor: pointer;
+  width: 20rem;
+  transform: scale(1.05);
 }
 
 .arrivals-container::before {
@@ -467,5 +473,4 @@ a {
 }
 .guest-card-open {
   display: flex;
-  justify-content: ;
 }

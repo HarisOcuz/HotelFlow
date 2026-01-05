@@ -13,13 +13,13 @@ function MainUi() {
   return (
     <div className="MainUi-container">
       <div>
-        <SideBar onClick={handleOnClick} />
+        <SideBar onClick={handleOnClick} setSiteOpen={setSiteOpen} />
       </div>
 
       <div className="dashboard-container">
         <NavBar />
         {siteOpen === "" ? (
-          <MainWindowShortInfo />
+          <MainWindowShortInfo setSiteOpen={setSiteOpen} />
         ) : siteOpen === "Anreisen" ? (
           <Arrivals />
         ) : siteOpen === "Abreisen" ? (
@@ -42,10 +42,11 @@ function MainUi() {
 
 // SIDEBAR
 
-function SideBar({ onClick }) {
+function SideBar({ onClick, setSiteOpen }) {
   return (
     <div className="sidebar-container">
       <img
+        onClick={() => setSiteOpen("")}
         className="logo-sidebar"
         src="/Hotel_Flow__1_-removebg-preview.png"
         alt="App Logo"
@@ -199,25 +200,29 @@ function NavBar() {
 
 // SHORT INFO - STATS
 
-function MainWindowShortInfo() {
+function MainWindowShortInfo({ setSiteOpen }) {
   return (
     <div className="mainWindow-container">
       <ShortInfo
+        setSiteOpen={setSiteOpen}
         className="mainWindow-short-info"
         text="Anreisen"
         nummer="18"
       />
       <ShortInfo
+        setSiteOpen={setSiteOpen}
         className="mainWindow-short-info mainWindow-short-info-abreisen"
         text="Abreisen"
         nummer="3"
       />
       <ShortInfo
+        setSiteOpen={setSiteOpen}
         className="mainWindow-short-info mainWindow-short-info-im-haus"
         text="Im Haus"
         nummer="4"
       />
       <ShortInfo
+        setSiteOpen={setSiteOpen}
         className="mainWindow-short-info "
         text="Belegt"
         nummer="39%"
@@ -226,9 +231,9 @@ function MainWindowShortInfo() {
   );
 }
 
-function ShortInfo({ text, nummer, className }) {
+function ShortInfo({ text, nummer, className, setSiteOpen }) {
   return (
-    <div className={className}>
+    <div className={className} onClick={() => setSiteOpen(text)}>
       <span className="text">{text}</span>
       <span className="nummer">{nummer}</span>
     </div>
