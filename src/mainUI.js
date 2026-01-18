@@ -2,8 +2,12 @@ import { useState } from "react";
 
 export default MainUi;
 
-function MainUi() {
+function MainUi({ setAuthStatus, authStatus }) {
   const [siteOpen, setSiteOpen] = useState("");
+
+  function handleLogOut() {
+    setAuthStatus((authStatus) => !authStatus);
+  }
 
   function handleOnClick(text) {
     console.log(siteOpen);
@@ -13,7 +17,12 @@ function MainUi() {
   return (
     <div className="MainUi-container">
       <div>
-        <SideBar onClick={handleOnClick} setSiteOpen={setSiteOpen} />
+        <SideBar
+          onClick={handleOnClick}
+          setSiteOpen={setSiteOpen}
+          sethAuthState={setAuthStatus}
+          onSetAuthStatus={handleLogOut}
+        />
       </div>
 
       <div className="dashboard-container">
@@ -42,7 +51,13 @@ function MainUi() {
 
 // SIDEBAR
 
-function SideBar({ onClick, setSiteOpen }) {
+function SideBar({
+  onClick,
+  setSiteOpen,
+  setAuthState,
+  authState,
+  onSetAuthStatus,
+}) {
   return (
     <div className="sidebar-container">
       <img
@@ -178,6 +193,9 @@ function SideBar({ onClick, setSiteOpen }) {
             </svg>
           }
         />
+        <button className="log-out btn" onClick={onSetAuthStatus}>
+          Auslogen
+        </button>
       </ul>
     </div>
   );
@@ -369,14 +387,34 @@ const guests = [
     bookingAgent: "tripadvisor",
     adults: 1,
     children: 0,
-    price: 199,
+    price: 199.36,
     inHouse: false,
     roomType: "SDZ",
   },
 ];
 
+const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
+const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
+const averagePricePerRoom = (
+  guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
+).toFixed(2);
+console.log(totalAdults);
+console.log(totalKids);
+
 function Arrivals() {
   const [isOpen, setIsOpen] = useState(null);
+  const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
+
+  const [addNewArrival, setAddNewArrival] = useState(false);
+
+  function handleAddNewArrival() {
+    setAddNewArrival(!addNewArrival);
+  }
+
+  function handleOpenSidePanel() {
+    console.log("open");
+    setIsOpenSidePanel(!isOpenSidePanel);
+  }
 
   function handleOnClick(id) {
     console.log(id);
@@ -385,92 +423,149 @@ function Arrivals() {
   }
 
   return (
-    <div className="ui-container arrivals-container">
-      {/* <div className="guest-card" onClick={handleOnClick}>
-        <div className="guest-card-short-info">
-          <div>
-            <h3>Haris Ocuz</h3>
-          </div>
-          <div>
-            <h3>20.05.2026</h3>
-            <h3>22.05.2026</h3>
-          </div>
-          <div>
-            <h3>Agent</h3>
-            <h3>expedia</h3>
-          </div>
-          <div>
-            <h3>Preis</h3>
-            <h3>119</h3>
-          </div>
-        </div>
-        {isOpen ? (
-          <div className="guest-card-details">
-            <ul>
-              <li>Erwachsene : 2</li>
-              <li>Kinder : 1</li>
-              <li>Zimmertyp : SDZ</li>
-            </ul>
-            <ul>
-              <li>Zahlungsart : KK</li>
-              <li>Preis : 119€</li>
-            </ul>
-            <button>Check in</button>
-            <button>X</button>
-          </div>
-        ) : null}
-      </div> */}
-      <Guest onClick={handleOnClick} isOpen={isOpen} />
+    <>
+      <SideShortInfo
+        stats={"btn-absolute-add-new-guest"}
+        onAddNewArrival={handleAddNewArrival}
+        addNewArrival={addNewArrival}
+      />
+      <div className="ui-container arrivals-container">
+        <Guest onClick={handleOnClick} isOpen={isOpen} />
+      </div>
+      <SideShortInfo
+        stats={"btn-absolute-statistics"}
+        onOpenSidePanel={handleOpenSidePanel}
+        isOpenSidePanel={isOpenSidePanel}
+      />
+    </>
+  );
+}
+
+function AddNewArrival() {
+  return (
+    <div>
+      <div className="flex-container">
+        <input type="text" placeHolder="Nachname" />
+        <input type="text" placeHolder="Vorname" />
+      </div>
+      <div className="flex-container">
+        <p>Erwachsene:</p>
+        <input type="number" placeHolder="Nachname" />
+        <p>Kinder:</p>
+        <input type="number" placeHolder="Vorname" />
+      </div>
     </div>
   );
 }
 
-function Guest({ isOpen, onClick }) {
-  return guests.map((guest) => (
-    <div
-      key={guest.id}
-      className="guest-card"
-      onClick={() => onClick(guest.id)}
-    >
-      <div className="guest-card-short-info">
-        <div>
-          <h3>{guest.firstName + " " + guest.lastName}</h3>
-        </div>
-        <div>
-          <h3>{guest.arrivalDate}</h3>
-          <h3>{guest.departureDate}</h3>
-        </div>
-        <div>
-          <h3>Agent</h3>
-          <h3>{guest.bookingAgent}</h3>
-        </div>
-        <div>
-          <h3>Preis</h3>
-          <h3>{guest.price}</h3>
-        </div>
-      </div>
-
-      {/* Prikazivanje detalja ako je isOpen true */}
-      {isOpen === guest.id && (
-        <div className="guest-card-open">
-          <ul>
-            <li>Erwachsene : {guest.adults}</li>
-            <li>Kinder : {guest.children}</li>
-            <li>Zimmertyp : {guest.roomType}</li>
-          </ul>
-          <ul>
-            <li>Zahlungsart : KK</li>
-            <li>Preis : {guest.price}€</li>
-
-            <div>
-              <button>Check in</button>
-              <button>X</button>
-            </div>
-          </ul>
+function SideShortInfo({
+  onOpenSidePanel,
+  isOpenSidePanel,
+  stats,
+  addNewArrival,
+  onAddNewArrival,
+}) {
+  return (
+    <>
+      <button
+        className={stats}
+        onClick={
+          stats === "btn-absolute-statistics"
+            ? onOpenSidePanel
+            : onAddNewArrival
+        }
+      >
+        {stats === "btn-absolute-statistics"
+          ? isOpenSidePanel
+            ? "-"
+            : "+"
+          : addNewArrival
+            ? "O"
+            : "Z"}
+      </button>
+      {isOpenSidePanel && (
+        <div className="flex-container">
+          {isOpenSidePanel && (
+            <>
+              <div className="side-short-info">
+                <span>Anreisen</span>
+                <span>{guests.length}</span>
+              </div>
+              <div className="side-short-info">
+                <span>⌀ Preis</span>
+                <span>{averagePricePerRoom}€</span>
+              </div>
+              <div className="side-short-info">
+                <span>Erwachsene</span>
+                <span>{totalAdults}</span>
+              </div>
+              <div className="side-short-info">
+                <span>Kinder</span>
+                <span>{totalKids}</span>
+              </div>
+            </>
+          )}
         </div>
       )}
+    </>
+  );
+}
+
+function Guest({ isOpen, onClick }) {
+  return (
+    <div className="guest-flex">
+      {guests.map((guest) => (
+        <div
+          key={guest.id}
+          className="guest-card"
+          // onClick={() => onClick(guest.id)}
+        >
+          <div
+            className="guest-card-short-info"
+            onClick={() => onClick(guest.id)}
+          >
+            <div>
+              <h3>{guest.firstName + " " + guest.lastName}</h3>
+            </div>
+            <div className="center-el">
+              <h3>{guest.arrivalDate}</h3>
+              <h3>{guest.departureDate}</h3>
+            </div>
+            <div className="center-el">
+              <h3>Agent</h3>
+              <h3>{guest.bookingAgent}</h3>
+            </div>
+            <div className="center-el">
+              <h3>Zimmertyp</h3>
+              <h3>{guest.roomType}</h3>
+            </div>
+            <div className="center-el">
+              <h3>Preis</h3>
+              <h3>{guest.price} €</h3>
+            </div>
+          </div>
+
+          {isOpen === guest.id && (
+            <div className="guest-card-open">
+              <ul>
+                <li>Erwachsene : {guest.adults}</li>
+                <li>Kinder : {guest.children}</li>
+                <li>Zimmertyp : {guest.roomType}</li>
+              </ul>
+              <ul>
+                <li>Zahlungsart : KK</li>
+                <li>Preis : {guest.price}€</li>
+              </ul>
+              <div>
+                <button>Check in</button>
+                <button>X</button>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
-  ));
+  );
 }
 
 function Departures() {

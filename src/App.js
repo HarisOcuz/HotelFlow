@@ -1,13 +1,20 @@
+import { useState } from "react";
 import Login from "./login";
-import Dashboard from "./dashboard";
 import MainUi from "./mainUI";
+import AddNewArrival from "./nerArrivals";
 
 function App() {
+  const [authStatus, setAuthStatus] = useState(false);
+
   return (
     <div className="App">
-      {/* <Login /> */}
-      {/* <Dashboard /> */}
-      <MainUi />
+      {authStatus ? (
+        <MainUi authStatus={authStatus} setAuthStatus={setAuthStatus} />
+      ) : (
+        <Login authStatus={authStatus} setAuthStatus={setAuthStatus} />
+      )}
+
+      {/* <AddNewArrival /> */}
     </div>
   );
 }

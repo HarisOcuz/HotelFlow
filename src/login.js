@@ -2,15 +2,15 @@ import { useState, useRef } from "react";
 
 export default Login;
 
-function Login() {
+function Login({ authStatus, setAuthStatus }) {
   return (
     <div className="container">
-      <LoginForm />
+      <LoginForm authStatus={authStatus} setAuthStatus={setAuthStatus} />
     </div>
   );
 }
 
-function LoginForm() {
+function LoginForm({ authStatus, setAuthStatus }) {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [userError, setUserError] = useState(false);
@@ -37,7 +37,7 @@ function LoginForm() {
     } else setPasswordError(false);
 
     if (user === "Haris" && Number(password) === 1846) {
-      alert("Uspjesan login");
+      setAuthStatus(true);
     }
 
     e.target.querySelectorAll("input").forEach((input) => input.blur());

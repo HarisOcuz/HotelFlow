@@ -2,6 +2,8 @@ BOJE:
 
 coolors => Fresh Greens;
 
+white : #f8f9fa
+
 Najblaza (pozadina):background-color: #e4ffe8;
   
 Malo javca: background-color: #b7e4c7;
