@@ -101,137 +101,6 @@ a {
 .MainUi-container {
   transition: all 1s;
 }
-/* LOGIN FORM */
-
-/* DASHBOARD */
-
-/* .dashboard-container {
-  width: 100%;
-}
-.navigation-bar {
-  padding: 0 3rem;
-  background-color: #74c69d;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.logo-header-footer {
-  width: 12rem;
-}
-
-.main-window {
-  font-weight: 700;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 5rem;
-  width: 100%;
-  max-height: 100vh;
-  overflow: hidden;
-  padding: 4rem 0;
-}
-
-.side-bar {
-  margin-left: 2rem;
-  border: none;
-  border-radius: 4rem;
-  justify-self: center;
-  align-self: center;
-  width: 15rem;
-  height: 100%;
-  max-height: calc(100vh - 4rem);
-
-  background-color: #74c69d;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  justify-content: center;
-  grid-column: 1/2;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  padding: 2rem 2rem;
-}
-.side-bar button {
-  background-color: #95d5b2;
-  transition: all 0.3;
-  font-size: 1.6rem;
-  font-weight: 600;
-}
-.side-bar button:hover {
-  transform: scale(1.1);
-}
-.side-bar {
-  opacity: 3;
-}
-.main-dashboard {
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: auto auto;
-  align-items: center;
-  justify-items: center;
-  width: 100%;
-  margin-left: 2rem;
-}
-.dashboard-info {
-  background-color: #74c69d;
-
-  font-size: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  line-height: 2;
-  padding: 6rem 6rem;
-
-  width: 30rem;
-
-  height: fit-content;
-  border: "none";
-  border-radius: 4rem;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s;
-  cursor: pointer;
-}
-
-.arrivals-dashboard,
-.percentage-dashboard {
-  transform: translate(-30%);
-  transition: all 0.3s;
-}
-.arrivals-dashboard:hover,
-.percentage-dashboard:hover {
-  transform: translate(-30%, -5%);
-}
-
-.checkout-dashboard,
-.free-rooms-dashboard {
-  transform: translate(30%);
-  transition: all 0.3s;
-}
-
-.checkout-dashboard:hover,
-.free-rooms-dashboard:hover {
-  transform: translate(30%, -5%);
-}
-
-.numbers {
-  font-size: 4rem;
-}
-.widget-container {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-.widget-container :last-child {
-  margin-top: 3rem;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-} */
 
 /* ******MainUI******* */
 
@@ -447,7 +316,6 @@ a {
 }
 
 .flex-container {
-  /* position: relative; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -489,7 +357,6 @@ a {
   gap: 1.5rem;
 }
 .side-short-info {
-  /* background-color: #f8f9fa; */
   background-color: transparent;
 
   height: 5rem;
@@ -557,10 +424,7 @@ a {
 .guest-card-short-info div {
   flex: 1;
 }
-/* .guest-card-short-info:hover {
-  cursor: pointer;
-  background-color: #95d5b2;
-} */
+
 .guest-card-open {
   padding: 0 3rem 2rem 2rem;
   display: flex;
@@ -578,9 +442,6 @@ ul {
   list-style: none;
 }
 .center-el {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between; */
   margin-left: 8rem;
 }
 
