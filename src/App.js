@@ -5,16 +5,27 @@ import AddNewArrival from "./nerArrivals";
 
 function App() {
   const [authStatus, setAuthStatus] = useState(false);
+  const [addNewArrivalBtn, setAddNewArrivalBtn] = useState(false);
 
   return (
     <div className="App">
       {authStatus ? (
-        <MainUi authStatus={authStatus} setAuthStatus={setAuthStatus} />
+        <MainUi
+          authStatus={authStatus}
+          setAuthStatus={setAuthStatus}
+          addNewArrivalBtn={addNewArrivalBtn}
+          setAddNewArrivalBtn={setAddNewArrivalBtn}
+        />
       ) : (
         <Login authStatus={authStatus} setAuthStatus={setAuthStatus} />
       )}
 
-      {/* <AddNewArrival /> */}
+      {addNewArrivalBtn ? (
+        <AddNewArrival
+          addNewArrivalBtn={addNewArrivalBtn}
+          setAddNewArrivalBtn={setAddNewArrivalBtn}
+        />
+      ) : null}
     </div>
   );
 }

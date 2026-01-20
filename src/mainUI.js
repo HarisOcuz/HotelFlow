@@ -1,9 +1,150 @@
 import { useState } from "react";
+import AddNewArrival from "./nerArrivals";
 
 export default MainUi;
 
-function MainUi({ setAuthStatus, authStatus }) {
+const guests2 = [
+  {
+    id: 1,
+    firstName: "Haris",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "expedia",
+    adults: 2,
+    children: 1,
+    price: 119,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 2,
+    firstName: "Fatima",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "booking",
+    adults: 1,
+    children: 0,
+    price: 99,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 3,
+    firstName: "Haris",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "expedia",
+    adults: 2,
+    children: 1,
+    price: 119,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 4,
+    firstName: "Fatima",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "booking",
+    adults: 1,
+    children: 0,
+    price: 99,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 5,
+    firstName: "Ali",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "HRS",
+    adults: 2,
+    children: 1,
+    price: 69,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 6,
+    firstName: "Mesa",
+    lastName: "Selimovic",
+    arrivalDate: "20.09.2026",
+    departureDate: "14.10.2026",
+    bookingAgent: "tripadvisor",
+    adults: 1,
+    children: 0,
+    price: 199,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 7,
+    firstName: "Ali",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "HRS",
+    adults: 2,
+    children: 1,
+    price: 69,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 8,
+    firstName: "Mesa",
+    lastName: "Selimovic",
+    arrivalDate: "20.09.2026",
+    departureDate: "14.10.2026",
+    bookingAgent: "tripadvisor",
+    adults: 1,
+    children: 0,
+    price: 199,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 9,
+    firstName: "Ali",
+    lastName: "Ocuz",
+    arrivalDate: "20.05.2026",
+    departureDate: "22.05.2026",
+    bookingAgent: "HRS",
+    adults: 2,
+    children: 1,
+    price: 69,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+  {
+    id: 10,
+    firstName: "Mesa",
+    lastName: "Selimovic",
+    arrivalDate: "20.09.2026",
+    departureDate: "14.10.2026",
+    bookingAgent: "tripadvisor",
+    adults: 1,
+    children: 0,
+    price: 199.36,
+    inHouse: false,
+    roomType: "SDZ",
+  },
+];
+
+function MainUi({
+  setAuthStatus,
+  authStatus,
+  addNewArrivalBtn,
+  setAddNewArrivalBtn,
+  newGuestObj,
+}) {
   const [siteOpen, setSiteOpen] = useState("");
+  const [guests, setGuests] = useState([...guests2]);
 
   function handleLogOut() {
     setAuthStatus((authStatus) => !authStatus);
@@ -30,7 +171,11 @@ function MainUi({ setAuthStatus, authStatus }) {
         {siteOpen === "" ? (
           <MainWindowShortInfo setSiteOpen={setSiteOpen} />
         ) : siteOpen === "Anreisen" ? (
-          <Arrivals />
+          <Arrivals
+            addNewArrivalBtn={addNewArrivalBtn}
+            setAddNewArrivalBtn={setAddNewArrivalBtn}
+            guests={guests}
+          />
         ) : siteOpen === "Abreisen" ? (
           <Departures />
         ) : siteOpen === "Im Haus" ? (
@@ -260,155 +405,18 @@ function ShortInfo({ text, nummer, className, setSiteOpen }) {
 
 // ARRIVALS
 
-const guests = [
-  {
-    id: 1,
-    firstName: "Haris",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "expedia",
-    adults: 2,
-    children: 1,
-    price: 119,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 2,
-    firstName: "Fatima",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "booking",
-    adults: 1,
-    children: 0,
-    price: 99,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 3,
-    firstName: "Haris",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "expedia",
-    adults: 2,
-    children: 1,
-    price: 119,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 4,
-    firstName: "Fatima",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "booking",
-    adults: 1,
-    children: 0,
-    price: 99,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 5,
-    firstName: "Ali",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "HRS",
-    adults: 2,
-    children: 1,
-    price: 69,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 6,
-    firstName: "Mesa",
-    lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
-    departureDate: "14.10.2026",
-    bookingAgent: "tripadvisor",
-    adults: 1,
-    children: 0,
-    price: 199,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 7,
-    firstName: "Ali",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "HRS",
-    adults: 2,
-    children: 1,
-    price: 69,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 8,
-    firstName: "Mesa",
-    lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
-    departureDate: "14.10.2026",
-    bookingAgent: "tripadvisor",
-    adults: 1,
-    children: 0,
-    price: 199,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 9,
-    firstName: "Ali",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "HRS",
-    adults: 2,
-    children: 1,
-    price: 69,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 10,
-    firstName: "Mesa",
-    lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
-    departureDate: "14.10.2026",
-    bookingAgent: "tripadvisor",
-    adults: 1,
-    children: 0,
-    price: 199.36,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-];
-
-const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
-const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
-const averagePricePerRoom = (
-  guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
-).toFixed(2);
-console.log(totalAdults);
-console.log(totalKids);
-
-function Arrivals() {
+function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
   const [isOpen, setIsOpen] = useState(null);
   const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
 
-  const [addNewArrival, setAddNewArrival] = useState(false);
+  const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
+  const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
+  const averagePricePerRoom = (
+    guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
+  ).toFixed(2);
 
-  function handleAddNewArrival() {
-    setAddNewArrival(!addNewArrival);
+  function handleAddNewArrivalBtn() {
+    setAddNewArrivalBtn(true);
   }
 
   function handleOpenSidePanel() {
@@ -426,35 +434,27 @@ function Arrivals() {
     <>
       <SideShortInfo
         stats={"btn-absolute-add-new-guest"}
-        onAddNewArrival={handleAddNewArrival}
-        addNewArrival={addNewArrival}
+        onAddNewArrival={handleAddNewArrivalBtn}
+        addNewArrival={addNewArrivalBtn}
+        guests={guests}
+        totalAdults={totalAdults}
+        averagePricePerRoom={averagePricePerRoom}
+        totalKids={totalKids}
+        averagePricePerRoom={averagePricePerRoom}
       />
       <div className="ui-container arrivals-container">
-        <Guest onClick={handleOnClick} isOpen={isOpen} />
+        <Guest onClick={handleOnClick} isOpen={isOpen} guests={guests} />
       </div>
       <SideShortInfo
         stats={"btn-absolute-statistics"}
         onOpenSidePanel={handleOpenSidePanel}
         isOpenSidePanel={isOpenSidePanel}
+        guests={guests}
+        totalAdults={totalAdults}
+        totalKids={totalKids}
+        averagePricePerRoom={averagePricePerRoom}
       />
     </>
-  );
-}
-
-function AddNewArrival() {
-  return (
-    <div>
-      <div className="flex-container">
-        <input type="text" placeHolder="Nachname" />
-        <input type="text" placeHolder="Vorname" />
-      </div>
-      <div className="flex-container">
-        <p>Erwachsene:</p>
-        <input type="number" placeHolder="Nachname" />
-        <p>Kinder:</p>
-        <input type="number" placeHolder="Vorname" />
-      </div>
-    </div>
   );
 }
 
@@ -464,6 +464,10 @@ function SideShortInfo({
   stats,
   addNewArrival,
   onAddNewArrival,
+  totalAdults,
+  totalKids,
+  averagePricePerRoom,
+  guests,
 }) {
   return (
     <>
@@ -511,7 +515,7 @@ function SideShortInfo({
   );
 }
 
-function Guest({ isOpen, onClick }) {
+function Guest({ isOpen, onClick, guests }) {
   return (
     <div className="guest-flex">
       {guests.map((guest) => (

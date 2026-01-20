@@ -323,10 +323,28 @@ a {
   width: 15rem;
   margin: 0 auto;
 }
-.grid-container {
+
+/* // ADD NEW GUEST FORM */
+
+.grid-container-add-guest-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem 4rem;
+  background-color: #2d6a4f;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
+  gap: 3rem;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  z-index: 0;
 }
 .btn-absolute-statistics {
   font-size: 2rem;
