@@ -1,6 +1,13 @@
 import { useState, useRef } from "react";
+import MainUi from "./mainUI";
 
-function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
+function AddNewArrival({
+  addNewArrivalBtn,
+  setAddNewArrivalBtn,
+  onAddGuest,
+  guests,
+  setGuests,
+}) {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [adults, setAdults] = useState("");
@@ -36,10 +43,6 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
       agent.length > 0 ||
       price > 0
     ) {
-      console.log(lastName.at(0).toUpperCase() + lastName.slice(1));
-      console.log(firstName.at(0).toUpperCase() + firstName.slice(1));
-      console.log(adults, children, agent, price);
-
       const newGuest = {
         lastName: lastName[0].toUpperCase() + lastName.slice(1),
         firstName: firstName[0].toLocaleUpperCase() + firstName.slice(1),
@@ -49,7 +52,7 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
         price,
       };
 
-      setNewGuestObj({ ...newGuest });
+      onAddGuest(newGuest);
 
       setLastName("");
       setFirstName("");
@@ -57,11 +60,12 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
       setChildren("");
       setPrice("");
       setAgent("");
-      setAddNewArrivalBtn(false);
+      // setAddNewArrivalBtn(false);
     } else {
       alert("Bitte alle Felder ausfüllen");
     }
   }
+  console.log(newGuestObj);
 
   function handleCloseAddNewGuestForm() {
     setAddNewArrivalBtn(!addNewArrivalBtn);
@@ -74,6 +78,7 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
         <div className="">
           <p>Name</p>
           <input
+            className="input-add-guest"
             type="text"
             placeHolder="Nachname"
             value={lastName}
@@ -81,6 +86,7 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
           />
           <p>Vorname</p>
           <input
+            className="input-add-guest"
             type="text"
             placeHolder="Vorname"
             value={firstName}
@@ -89,13 +95,24 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
         </div>
         <div className="">
           <p>Erwachsene:</p>
-          <input type="number" value={adults} onChange={handleSetAdults} />
+          <input
+            className="input-add-guest"
+            type="number"
+            value={adults}
+            onChange={handleSetAdults}
+          />
           <p>Kinder:</p>
-          <input type="number" value={children} onChange={handleSetChildren} />
+          <input
+            className="input-add-guest"
+            type="number"
+            value={children}
+            onChange={handleSetChildren}
+          />
         </div>
         <div className="">
           <p>Agent</p>
           <input
+            className="input-add-guest"
             type="text"
             placeHolder="Booking, Expedia..."
             value={agent}
@@ -103,15 +120,49 @@ function AddNewArrival({ addNewArrivalBtn, setAddNewArrivalBtn }) {
           />
           <p>Preis</p>
           <input
+            className="input-add-guest"
             type="number"
             placeHolder="0,00€"
             value={price}
             onChange={handleSetPrice}
           />
         </div>
-        <div className="">
-          <button onClick={handleSetNewGuest}>+</button>
-          <button onClick={handleCloseAddNewGuestForm}>X</button>
+        <div className="btns-add-new-guest">
+          <button class="btn-add-cancel-guest" onClick={handleSetNewGuest}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="6"
+              stroke="green"
+              class="btn-add-guest"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m4.5 12.75 6 6 9-13.5"
+              />
+            </svg>
+          </button>
+          <button
+            className="btn-add-cancel-guest"
+            onClick={handleCloseAddNewGuestForm}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="6"
+              stroke="red"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </>

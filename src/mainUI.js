@@ -1,140 +1,5 @@
 import { useState } from "react";
-import AddNewArrival from "./nerArrivals";
-
-export default MainUi;
-
-const guests2 = [
-  {
-    id: 1,
-    firstName: "Haris",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "expedia",
-    adults: 2,
-    children: 1,
-    price: 119,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 2,
-    firstName: "Fatima",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "booking",
-    adults: 1,
-    children: 0,
-    price: 99,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 3,
-    firstName: "Haris",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "expedia",
-    adults: 2,
-    children: 1,
-    price: 119,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 4,
-    firstName: "Fatima",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "booking",
-    adults: 1,
-    children: 0,
-    price: 99,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 5,
-    firstName: "Ali",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "HRS",
-    adults: 2,
-    children: 1,
-    price: 69,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 6,
-    firstName: "Mesa",
-    lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
-    departureDate: "14.10.2026",
-    bookingAgent: "tripadvisor",
-    adults: 1,
-    children: 0,
-    price: 199,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 7,
-    firstName: "Ali",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "HRS",
-    adults: 2,
-    children: 1,
-    price: 69,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 8,
-    firstName: "Mesa",
-    lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
-    departureDate: "14.10.2026",
-    bookingAgent: "tripadvisor",
-    adults: 1,
-    children: 0,
-    price: 199,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 9,
-    firstName: "Ali",
-    lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
-    departureDate: "22.05.2026",
-    bookingAgent: "HRS",
-    adults: 2,
-    children: 1,
-    price: 69,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-  {
-    id: 10,
-    firstName: "Mesa",
-    lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
-    departureDate: "14.10.2026",
-    bookingAgent: "tripadvisor",
-    adults: 1,
-    children: 0,
-    price: 199.36,
-    inHouse: false,
-    roomType: "SDZ",
-  },
-];
+import AddNewArrival from "./AddNewArrivals";
 
 function MainUi({
   setAuthStatus,
@@ -142,9 +7,16 @@ function MainUi({
   addNewArrivalBtn,
   setAddNewArrivalBtn,
   newGuestObj,
+  guests,
 }) {
+  console.log(newGuestObj);
+
   const [siteOpen, setSiteOpen] = useState("");
-  const [guests, setGuests] = useState([...guests2]);
+
+  // function allGuests() {
+  //   if (newGuestObj) guests2.push(newGuestObj);
+  //   console.log(guests2);
+  // }
 
   function handleLogOut() {
     setAuthStatus((authStatus) => !authStatus);
@@ -479,13 +351,56 @@ function SideShortInfo({
             : onAddNewArrival
         }
       >
-        {stats === "btn-absolute-statistics"
-          ? isOpenSidePanel
-            ? "-"
-            : "+"
-          : addNewArrival
-            ? "O"
-            : "Z"}
+        {stats === "btn-absolute-statistics" ? (
+          isOpenSidePanel ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="4"
+              stroke="red"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="#b7e4c7"
+              class="stats-add-btn"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"
+              />
+            </svg>
+          )
+        ) : addNewArrival ? (
+          "O"
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="#b7e4c7"
+            class="stats-add-btn"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+            />
+          </svg>
+        )}
       </button>
       {isOpenSidePanel && (
         <div className="flex-container">
@@ -523,6 +438,7 @@ function Guest({ isOpen, onClick, guests }) {
           key={guest.id}
           className="guest-card"
           // onClick={() => onClick(guest.id)}
+          style={isOpen === guest.id ? { backgroundColor: "#dde9e1" } : {}}
         >
           <div
             className="guest-card-short-info"
@@ -552,17 +468,63 @@ function Guest({ isOpen, onClick, guests }) {
           {isOpen === guest.id && (
             <div className="guest-card-open">
               <ul>
-                <li>Erwachsene : {guest.adults}</li>
-                <li>Kinder : {guest.children}</li>
-                <li>Zimmertyp : {guest.roomType}</li>
+                <li>
+                  <strong>Erwachsene:</strong> {guest.adults}
+                </li>
+
+                <li>
+                  <strong>Kinder:</strong> {guest.children}
+                </li>
+                <li>
+                  <strong>Zimmertyp:</strong> {guest.roomType}
+                </li>
               </ul>
               <ul>
-                <li>Zahlungsart : KK</li>
-                <li>Preis : {guest.price}€</li>
+                <li>
+                  <strong>Zahlungsart:</strong> KK
+                </li>
+                <li>
+                  <strong>Preis:</strong>
+                  {guest.price}€
+                </li>
+                <li>
+                  <strong>Datum:</strong>
+                  {guest.arrivalDate} / {guest.departureDate}
+                </li>
               </ul>
-              <div>
-                <button>Check in</button>
-                <button>X</button>
+              <div className="checkmarks">
+                <button className="guest-card-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="6"
+                    stroke="green"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m4.5 12.75 6 6 9-13.5"
+                    />
+                  </svg>
+                </button>
+                <button className="guest-card-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="6"
+                    stroke="red"
+                    class="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18 18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
           )}
@@ -611,3 +573,5 @@ function Maintance() {
     </div>
   );
 }
+
+export default MainUi;
