@@ -3,12 +3,14 @@ import Login from "./login";
 import MainUi from "./mainUI";
 import AddNewArrival from "./AddNewArrivals";
 
+const date = new Date().toISOString().split("T")[0];
+
 const guests2 = [
   {
     id: 1,
     firstName: "Haris",
     lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
+    arrivalDate: "28.01.2026",
     departureDate: "22.05.2026",
     bookingAgent: "expedia",
     adults: 2,
@@ -60,7 +62,7 @@ const guests2 = [
     id: 5,
     firstName: "Ali",
     lastName: "Ocuz",
-    arrivalDate: "20.05.2026",
+    arrivalDate: "28.01.2026",
     departureDate: "22.05.2026",
     bookingAgent: "HRS",
     adults: 2,
@@ -99,7 +101,7 @@ const guests2 = [
     id: 8,
     firstName: "Mesa",
     lastName: "Selimovic",
-    arrivalDate: "20.09.2026",
+    arrivalDate: "28.01.2026",
     departureDate: "14.10.2026",
     bookingAgent: "tripadvisor",
     adults: 1,
@@ -142,6 +144,16 @@ function App() {
   const [authStatus, setAuthStatus] = useState(true);
   const [addNewArrivalBtn, setAddNewArrivalBtn] = useState(false);
   const [guests, setGuests] = useState([...guests2]);
+  const [arrivalDate, setArrivalDate] = useState(date);
+  const [departureDate, setDepartureDate] = useState(arrivalDate);
+
+  function formatedDate(date) {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // mjeseci od 0
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
 
   function handleAddGuest(newGuest) {
     setGuests((prevGuests) => [
@@ -159,6 +171,9 @@ function App() {
           setAuthStatus={setAuthStatus}
           addNewArrivalBtn={addNewArrivalBtn}
           setAddNewArrivalBtn={setAddNewArrivalBtn}
+          arrivalDate={arrivalDate}
+          departureDate={departureDate}
+          formatedDate={formatedDate}
         />
       ) : (
         <Login authStatus={authStatus} setAuthStatus={setAuthStatus} />
@@ -169,6 +184,11 @@ function App() {
           addNewArrivalBtn={addNewArrivalBtn}
           setAddNewArrivalBtn={setAddNewArrivalBtn}
           onAddGuest={handleAddGuest}
+          arrivalDate={arrivalDate}
+          departureDate={departureDate}
+          setArrivalDate={setArrivalDate}
+          setDepartureDate={setDepartureDate}
+          formatedDate={formatedDate}
         />
       ) : null}
     </div>

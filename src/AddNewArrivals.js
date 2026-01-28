@@ -11,7 +11,11 @@ function AddNewArrival({
   setAddNewArrivalBtn,
   onAddGuest,
   guests,
-  setGuests,
+  arrivalDate,
+  setArrivalDate,
+  departureDate,
+  setDepartureDate,
+  formatedDate,
 }) {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -21,14 +25,22 @@ function AddNewArrival({
   const [price, setPrice] = useState("");
   const [newGuestObj, setNewGuestObj] = useState({});
   const [roomType, setRoomType] = useState("SEZ");
-  const [arrivalDate, setArrivalDate] = useState(date);
-  const [departureDate, setDepartureDate] = useState(arrivalDate);
 
   // Calculating the difference between arrival and departure (in # of nights)
   const arrival = new Date(arrivalDate);
   const departure = new Date(departureDate);
   const diffTime = departure - arrival;
   const totalNights = diffTime / (1000 * 60 * 60 * 24);
+
+  // Formatting the output date
+
+  // function formatedDate(date) {
+  //   const d = new Date(date);
+  //   const day = String(d.getDate()).padStart(2, "0");
+  //   const month = String(d.getMonth() + 1).padStart(2, "0"); // mjeseci od 0
+  //   const year = d.getFullYear();
+  //   return `${day}.${month}.${year}`;
+  // }
 
   function handleSetLastName(e) {
     setLastName(e.target.value);
@@ -69,14 +81,15 @@ function AddNewArrival({
         children,
         bookingAgent: agent,
         price,
-        arrivalDate: "20.05.2026",
-        departureDate: "22.05.2026",
+        arrivalDate: formatedDate(arrivalDate),
+        departureDate: formatedDate(departureDate),
         inHouse: false,
         roomType: roomType,
       };
 
       onAddGuest(newGuest);
       console.log(newGuest);
+      console.log(guests);
 
       setLastName("");
       setFirstName("");

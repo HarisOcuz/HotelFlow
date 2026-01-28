@@ -1,5 +1,9 @@
 import { useState } from "react";
 import AddNewArrival from "./AddNewArrivals";
+import { todaysDate } from "./todaysDate";
+
+const date = new Date().toISOString().split("T")[0];
+console.log(date);
 
 function MainUi({
   setAuthStatus,
@@ -8,9 +12,9 @@ function MainUi({
   setAddNewArrivalBtn,
   newGuestObj,
   guests,
+  arrivalDate,
+  departureDate,
 }) {
-  console.log(newGuestObj);
-
   const [siteOpen, setSiteOpen] = useState("");
 
   // function allGuests() {
@@ -230,7 +234,12 @@ function ListElement({ text, onClick, icon }) {
 // NAVBAR
 
 function NavBar() {
-  return <div className="navbar-container">Wilkommen zurück Haris</div>;
+  return (
+    <div className="navbar-container">
+      <h4>Wilkommen zurück Haris</h4>
+      <p>{todaysDate(date)}</p>
+    </div>
+  );
 }
 
 // SHORT INFO - STATS
@@ -281,10 +290,20 @@ function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
   const [isOpen, setIsOpen] = useState(null);
   const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
 
-  const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
-  const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
-  const averagePricePerRoom = (
-    guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
+  // const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
+
+  const totalAdultsArrivals = guests
+    .filter((guest) => guest.arrivalDate === todaysDate(date))
+    .reduce((acc, guest) => acc + guest.adults, 0);
+
+  const totalKidsArrivals = guests
+    .filter((guest) => guest.arrivalDate === todaysDate(date))
+    .reduce((acc, guest) => acc + guest.children, 0);
+  const averagePricePerRoomArrivals = (
+    guests
+      .filter((guest) => guest.arrivalDate === todaysDate(date))
+      .reduce((acc, guest) => acc + guest.price, 0) /
+    guests.filter((guest) => guest.arrivalDate === todaysDate(date)).length
   ).toFixed(2);
 
   function handleAddNewArrivalBtn() {
@@ -304,41 +323,44 @@ function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
 
   return (
     <>
-      <SideShortInfo
+      <SideShortInfoArrivals
         stats={"btn-absolute-add-new-guest"}
         onAddNewArrival={handleAddNewArrivalBtn}
         addNewArrival={addNewArrivalBtn}
         guests={guests}
-        totalAdults={totalAdults}
-        averagePricePerRoom={averagePricePerRoom}
-        totalKids={totalKids}
-        averagePricePerRoom={averagePricePerRoom}
+        totalAdultsArrivals={totalAdultsArrivals}
+        averagePricePerRoomArrivals={averagePricePerRoomArrivals}
+        totalKidsArrivals={totalKidsArrivals}
       />
       <div className="ui-container arrivals-container">
-        <Guest onClick={handleOnClick} isOpen={isOpen} guests={guests} />
+        <GuestsArrivalToday
+          onClick={handleOnClick}
+          isOpen={isOpen}
+          guests={guests}
+        />
       </div>
-      <SideShortInfo
+      <SideShortInfoArrivals
         stats={"btn-absolute-statistics"}
         onOpenSidePanel={handleOpenSidePanel}
         isOpenSidePanel={isOpenSidePanel}
         guests={guests}
-        totalAdults={totalAdults}
-        totalKids={totalKids}
-        averagePricePerRoom={averagePricePerRoom}
+        totalAdultsArrivals={totalAdultsArrivals}
+        totalKidsArrivals={totalKidsArrivals}
+        averagePricePerRoomArrivals={averagePricePerRoomArrivals}
       />
     </>
   );
 }
 
-function SideShortInfo({
+function SideShortInfoArrivals({
   onOpenSidePanel,
   isOpenSidePanel,
   stats,
   addNewArrival,
   onAddNewArrival,
-  totalAdults,
-  totalKids,
-  averagePricePerRoom,
+  totalAdultsArrivals,
+  totalKidsArrivals,
+  averagePricePerRoomArrivals,
   guests,
 }) {
   return (
@@ -408,19 +430,25 @@ function SideShortInfo({
             <>
               <div className="side-short-info">
                 <span>Anreisen</span>
-                <span>{guests.length}</span>
+                <span>
+                  {
+                    guests.filter(
+                      (guest) => guest.arrivalDate === todaysDate(date),
+                    ).length
+                  }
+                </span>
               </div>
               <div className="side-short-info">
                 <span>⌀ Preis</span>
-                <span>{averagePricePerRoom}€</span>
+                <span>{averagePricePerRoomArrivals}€</span>
               </div>
               <div className="side-short-info">
                 <span>Erwachsene</span>
-                <span>{totalAdults}</span>
+                <span>{totalAdultsArrivals}</span>
               </div>
               <div className="side-short-info">
                 <span>Kinder</span>
-                <span>{totalKids}</span>
+                <span>{totalKidsArrivals}</span>
               </div>
             </>
           )}
@@ -430,106 +458,110 @@ function SideShortInfo({
   );
 }
 
-function Guest({ isOpen, onClick, guests }) {
+console.log(todaysDate());
+
+function GuestsArrivalToday({ isOpen, onClick, guests }) {
   return (
     <div className="guest-flex">
-      {guests.map((guest) => (
-        <div
-          key={guest.id}
-          className="guest-card"
-          // onClick={() => onClick(guest.id)}
-          style={isOpen === guest.id ? { backgroundColor: "#dde9e1" } : {}}
-        >
+      {guests
+        .filter((guest) => guest.arrivalDate === todaysDate(date))
+        .map((guest) => (
           <div
-            className="guest-card-short-info"
-            onClick={() => onClick(guest.id)}
+            key={guest.id}
+            className="guest-card"
+            // onClick={() => onClick(guest.id)}
+            style={isOpen === guest.id ? { backgroundColor: "#dde9e1" } : {}}
           >
-            <div>
-              <h3>{guest.firstName + " " + guest.lastName}</h3>
-            </div>
-            <div className="center-el">
-              <h3>{guest.arrivalDate}</h3>
-              <h3>{guest.departureDate}</h3>
-            </div>
-            <div className="center-el">
-              <h3>Agent</h3>
-              <h3>{guest.bookingAgent}</h3>
-            </div>
-            <div className="center-el">
-              <h3>Zimmertyp</h3>
-              <h3>{guest.roomType}</h3>
-            </div>
-            <div className="center-el">
-              <h3>Preis</h3>
-              <h3>{guest.price} €</h3>
-            </div>
-          </div>
-
-          {isOpen === guest.id && (
-            <div className="guest-card-open">
-              <ul>
-                <li>
-                  <strong>Erwachsene:</strong> {guest.adults}
-                </li>
-
-                <li>
-                  <strong>Kinder:</strong> {guest.children}
-                </li>
-                <li>
-                  <strong>Zimmertyp:</strong> {guest.roomType}
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <strong>Zahlungsart:</strong> KK
-                </li>
-                <li>
-                  <strong>Preis:</strong>
-                  {guest.price}€
-                </li>
-                <li>
-                  <strong>Datum:</strong>
-                  {guest.arrivalDate} / {guest.departureDate}
-                </li>
-              </ul>
-              <div className="checkmarks">
-                <button className="guest-card-btn">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="6"
-                    stroke="green"
-                    class="size-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m4.5 12.75 6 6 9-13.5"
-                    />
-                  </svg>
-                </button>
-                <button className="guest-card-btn">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="6"
-                    stroke="red"
-                    class="size-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M6 18 18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+            <div
+              className="guest-card-short-info"
+              onClick={() => onClick(guest.id)}
+            >
+              <div>
+                <h3>{guest.firstName + " " + guest.lastName}</h3>
+              </div>
+              <div className="center-el">
+                <h3>{guest.arrivalDate}</h3>
+                <h3>{guest.departureDate}</h3>
+              </div>
+              <div className="center-el">
+                <h3>Agent</h3>
+                <h3>{guest.bookingAgent}</h3>
+              </div>
+              <div className="center-el">
+                <h3>Zimmertyp</h3>
+                <h3>{guest.roomType}</h3>
+              </div>
+              <div className="center-el">
+                <h3>Preis</h3>
+                <h3>{guest.price} €</h3>
               </div>
             </div>
-          )}
-        </div>
-      ))}
+
+            {isOpen === guest.id && (
+              <div className="guest-card-open">
+                <ul>
+                  <li>
+                    <strong>Erwachsene:</strong> {guest.adults}
+                  </li>
+
+                  <li>
+                    <strong>Kinder:</strong> {guest.children}
+                  </li>
+                  <li>
+                    <strong>Zimmertyp:</strong> {guest.roomType}
+                  </li>
+                </ul>
+                <ul>
+                  <li>
+                    <strong>Zahlungsart:</strong> KK
+                  </li>
+                  <li>
+                    <strong>Preis:</strong>
+                    {guest.price}€
+                  </li>
+                  <li>
+                    <strong>Datum:</strong>
+                    {guest.arrivalDate} / {guest.departureDate}
+                  </li>
+                </ul>
+                <div className="checkmarks">
+                  <button className="guest-card-btn">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="6"
+                      stroke="green"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m4.5 12.75 6 6 9-13.5"
+                      />
+                    </svg>
+                  </button>
+                  <button className="guest-card-btn">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="6"
+                      stroke="red"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
     </div>
   );
 }
