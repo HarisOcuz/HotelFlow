@@ -1,6 +1,11 @@
 import { useState, useRef } from "react";
 import MainUi from "./mainUI";
 
+const date = new Date().toISOString().split("T")[0];
+// const todaysDate = date.toLocaleDateString("de-DE"); // Europski format
+
+console.log(typeof date);
+
 function AddNewArrival({
   addNewArrivalBtn,
   setAddNewArrivalBtn,
@@ -15,6 +20,15 @@ function AddNewArrival({
   const [agent, setAgent] = useState("");
   const [price, setPrice] = useState("");
   const [newGuestObj, setNewGuestObj] = useState({});
+  const [roomType, setRoomType] = useState("SEZ");
+  const [arrivalDate, setArrivalDate] = useState(date);
+  const [departureDate, setDepartureDate] = useState(arrivalDate);
+
+  // Calculating the difference between arrival and departure (in # of nights)
+  const arrival = new Date(arrivalDate);
+  const departure = new Date(departureDate);
+  const diffTime = departure - arrival;
+  const totalNights = diffTime / (1000 * 60 * 60 * 24);
 
   function handleSetLastName(e) {
     setLastName(e.target.value);
@@ -35,6 +49,11 @@ function AddNewArrival({
     setPrice(Number(e.target.value));
   }
 
+  function handleSetRoomType(e) {
+    setRoomType((prev) => e.target.value);
+    console.log(roomType);
+  }
+
   function handleSetNewGuest() {
     if (
       lastName.length > 0 ||
@@ -48,11 +67,16 @@ function AddNewArrival({
         firstName: firstName[0].toLocaleUpperCase() + firstName.slice(1),
         adults,
         children,
-        agent,
+        bookingAgent: agent,
         price,
+        arrivalDate: "20.05.2026",
+        departureDate: "22.05.2026",
+        inHouse: false,
+        roomType: roomType,
       };
 
       onAddGuest(newGuest);
+      console.log(newGuest);
 
       setLastName("");
       setFirstName("");
@@ -60,10 +84,27 @@ function AddNewArrival({
       setChildren("");
       setPrice("");
       setAgent("");
-      // setAddNewArrivalBtn(false);
+      setAddNewArrivalBtn(false);
     } else {
       alert("Bitte alle Felder ausfüllen");
     }
+  }
+
+  function handleSetArrivalDate(e) {
+    const selectedDate = e.target.value;
+    // const guestDateFinal = new Date(guestDate).toLocaleDateString("de-DE");
+
+    if (selectedDate < date) return;
+
+    setArrivalDate(e.target.value);
+    setDepartureDate(e.target.value);
+
+    // setArrivalDate(guestDateFinal);
+  }
+
+  function handleSetDepartureDate(e) {
+    if (departureDate < arrivalDate) return;
+    setDepartureDate(e.target.value);
   }
   console.log(newGuestObj);
 
@@ -76,55 +117,82 @@ function AddNewArrival({
       <div className="overlay"></div>
       <div className="grid-container-add-guest-form">
         <div className="">
-          <p>Name</p>
-          <input
-            className="input-add-guest"
-            type="text"
-            placeHolder="Nachname"
-            value={lastName}
-            onChange={handleSetLastName}
-          />
-          <p>Vorname</p>
-          <input
-            className="input-add-guest"
-            type="text"
-            placeHolder="Vorname"
+          <AddingNewGuestInputFields
+            description="Vorname"
+            placeHolder="Max"
             value={firstName}
             onChange={handleSetFirstName}
           />
+
+          <AddingNewGuestInputFields
+            description="Nachname"
+            placeHolder="Mustermann"
+            value={lastName}
+            onChange={handleSetLastName}
+          />
         </div>
         <div className="">
-          <p>Erwachsene:</p>
-          <input
-            className="input-add-guest"
+          <AddingNewGuestInputFields
+            description="Erwachsene"
             type="number"
+            placeHolder={0}
             value={adults}
             onChange={handleSetAdults}
           />
-          <p>Kinder:</p>
-          <input
-            className="input-add-guest"
+          <AddingNewGuestInputFields
+            description="Kinder"
+            placeHolder={0}
             type="number"
             value={children}
             onChange={handleSetChildren}
           />
         </div>
         <div className="">
-          <p>Agent</p>
-          <input
-            className="input-add-guest"
-            type="text"
+          <AddingNewGuestInputFields
+            description="Agent"
             placeHolder="Booking, Expedia..."
             value={agent}
             onChange={handleSetAgent}
           />
-          <p>Preis</p>
+          <AddingNewGuestInputFields
+            description="Preis"
+            value={price}
+            placeHolder="0,00€"
+            onChange={handleSetPrice}
+            type="number"
+          />
+        </div>
+        <div>
+          <p>Zimmertyp</p>
+          <select
+            className="input-add-guest input-add-guest-select"
+            value={roomType}
+            onChange={handleSetRoomType}
+          >
+            <option>SEZ</option>
+            <option>CEZ</option>
+            <option>SDZ</option>
+            <option>CDZ</option>
+            <option>LUDZ</option>
+            <option>STWIN</option>
+          </select>
+          <p className="total-nights">Nächte insgesamt</p>
+          <h3 className="number-of-nights"> {totalNights}</h3>
+        </div>
+        <div>
+          <p>Anreise</p>
           <input
             className="input-add-guest"
-            type="number"
-            placeHolder="0,00€"
-            value={price}
-            onChange={handleSetPrice}
+            type="date"
+            value={arrivalDate}
+            onChange={handleSetArrivalDate}
+          />
+          <p>Abreise</p>
+          <input
+            className="input-add-guest"
+            type="date"
+            value={departureDate}
+            onChange={handleSetDepartureDate}
           />
         </div>
         <div className="btns-add-new-guest">
@@ -169,4 +237,24 @@ function AddNewArrival({
   );
 }
 
+function AddingNewGuestInputFields({
+  description,
+  placeHolder,
+  value,
+  onChange,
+  type,
+}) {
+  return (
+    <>
+      <p>{description}</p>
+      <input
+        className="input-add-guest"
+        placeHolder={placeHolder}
+        value={value}
+        onChange={onChange}
+        type={type}
+      />
+    </>
+  );
+}
 export default AddNewArrival;
