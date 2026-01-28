@@ -16,12 +16,12 @@ function MainUi({
   departureDate,
 }) {
   const [siteOpen, setSiteOpen] = useState("");
+  const [showAllArrivals, setShowAllArrivals] = useState(false);
 
-  // function allGuests() {
-  //   if (newGuestObj) guests2.push(newGuestObj);
-  //   console.log(guests2);
-  // }
-
+  function handleShowAllArrivals() {
+    console.log(showAllArrivals);
+    setShowAllArrivals((prev) => !prev);
+  }
   function handleLogOut() {
     setAuthStatus((authStatus) => !authStatus);
   }
@@ -51,6 +51,9 @@ function MainUi({
             addNewArrivalBtn={addNewArrivalBtn}
             setAddNewArrivalBtn={setAddNewArrivalBtn}
             guests={guests}
+            showAllArrivals={showAllArrivals}
+            onShowAllArrivals={handleShowAllArrivals}
+            setShowAllArrivals={setShowAllArrivals}
           />
         ) : siteOpen === "Abreisen" ? (
           <Departures />
@@ -286,16 +289,21 @@ function ShortInfo({ text, nummer, className, setSiteOpen }) {
 
 // ARRIVALS
 
-function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
+function Arrivals({
+  addNewArrivalBtn,
+  setAddNewArrivalBtn,
+  guests,
+  showAllArrivals,
+  setShowAllArrivals,
+  onShowAllArrivals,
+}) {
   const [isOpen, setIsOpen] = useState(null);
   const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
 
-  // const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
-
+  // Stats for todays arrivals
   const totalAdultsArrivals = guests
     .filter((guest) => guest.arrivalDate === todaysDate(date))
     .reduce((acc, guest) => acc + guest.adults, 0);
-
   const totalKidsArrivals = guests
     .filter((guest) => guest.arrivalDate === todaysDate(date))
     .reduce((acc, guest) => acc + guest.children, 0);
@@ -304,6 +312,14 @@ function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
       .filter((guest) => guest.arrivalDate === todaysDate(date))
       .reduce((acc, guest) => acc + guest.price, 0) /
     guests.filter((guest) => guest.arrivalDate === todaysDate(date)).length
+  ).toFixed(2);
+
+  // Stats for arrivals in total
+
+  const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
+  const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
+  const averagePricePerRoom = (
+    guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
   ).toFixed(2);
 
   function handleAddNewArrivalBtn() {
@@ -324,29 +340,51 @@ function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
   return (
     <>
       <SideShortInfoArrivals
-        stats={"btn-absolute-add-new-guest"}
+        className={"btn-absolute-add-new-guest"}
         onAddNewArrival={handleAddNewArrivalBtn}
         addNewArrival={addNewArrivalBtn}
         guests={guests}
-        totalAdultsArrivals={totalAdultsArrivals}
-        averagePricePerRoomArrivals={averagePricePerRoomArrivals}
-        totalKidsArrivals={totalKidsArrivals}
       />
+      <button
+        className="btn-absolute-show-all-guests"
+        onClick={onShowAllArrivals}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="#b7e4c7"
+          class="stats-add-btn"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"
+          />
+        </svg>
+      </button>
+
       <div className="ui-container arrivals-container">
         <GuestsArrivalToday
           onClick={handleOnClick}
           isOpen={isOpen}
           guests={guests}
+          showAllArrivals={showAllArrivals}
         />
       </div>
       <SideShortInfoArrivals
-        stats={"btn-absolute-statistics"}
+        className={"btn-absolute-statistics"}
         onOpenSidePanel={handleOpenSidePanel}
         isOpenSidePanel={isOpenSidePanel}
         guests={guests}
         totalAdultsArrivals={totalAdultsArrivals}
         totalKidsArrivals={totalKidsArrivals}
         averagePricePerRoomArrivals={averagePricePerRoomArrivals}
+        showAllArrivals={showAllArrivals}
+        totalAdults={totalAdults}
+        totalKids={totalKids}
+        averagePricePerRoom={averagePricePerRoom}
       />
     </>
   );
@@ -355,25 +393,29 @@ function Arrivals({ addNewArrivalBtn, setAddNewArrivalBtn, guests }) {
 function SideShortInfoArrivals({
   onOpenSidePanel,
   isOpenSidePanel,
-  stats,
+  className,
   addNewArrival,
   onAddNewArrival,
   totalAdultsArrivals,
   totalKidsArrivals,
   averagePricePerRoomArrivals,
   guests,
+  showAllArrivals,
+  totalAdults,
+  totalKids,
+  averagePricePerRoom,
 }) {
   return (
     <>
       <button
-        className={stats}
+        className={className}
         onClick={
-          stats === "btn-absolute-statistics"
+          className === "btn-absolute-statistics"
             ? onOpenSidePanel
             : onAddNewArrival
         }
       >
-        {stats === "btn-absolute-statistics" ? (
+        {className === "btn-absolute-statistics" ? (
           isOpenSidePanel ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -424,7 +466,7 @@ function SideShortInfoArrivals({
           </svg>
         )}
       </button>
-      {isOpenSidePanel && (
+      {isOpenSidePanel && !showAllArrivals ? (
         <div className="flex-container">
           {isOpenSidePanel && (
             <>
@@ -453,115 +495,236 @@ function SideShortInfoArrivals({
             </>
           )}
         </div>
-      )}
+      ) : isOpenSidePanel && showAllArrivals ? (
+        <div className="flex-container">
+          <div className="side-short-info">
+            <span>Anreisen</span>
+            <span>{guests.length}</span>
+          </div>
+          <div className="side-short-info">
+            <span>⌀ Preis</span>
+            <span>{averagePricePerRoom}€</span>
+          </div>
+          <div className="side-short-info">
+            <span>Erwachsene</span>
+            <span>{totalAdults}</span>
+          </div>
+          <div className="side-short-info">
+            <span>Kinder</span>
+            <span>{totalKids}</span>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
 
 console.log(todaysDate());
 
-function GuestsArrivalToday({ isOpen, onClick, guests }) {
+function GuestsArrivalToday({ isOpen, onClick, guests, showAllArrivals }) {
+  console.log(showAllArrivals);
+
   return (
     <div className="guest-flex">
-      {guests
-        .filter((guest) => guest.arrivalDate === todaysDate(date))
-        .map((guest) => (
-          <div
-            key={guest.id}
-            className="guest-card"
-            // onClick={() => onClick(guest.id)}
-            style={isOpen === guest.id ? { backgroundColor: "#dde9e1" } : {}}
-          >
+      {showAllArrivals === false
+        ? guests
+            .filter((guest) => guest.arrivalDate === todaysDate(date))
+            .map((guest) => (
+              <div
+                key={guest.id}
+                className="guest-card"
+                // onClick={() => onClick(guest.id)}
+                style={
+                  isOpen === guest.id ? { backgroundColor: "#dde9e1" } : {}
+                }
+              >
+                <div
+                  className="guest-card-short-info"
+                  onClick={() => onClick(guest.id)}
+                >
+                  <div>
+                    <h3>{guest.firstName + " " + guest.lastName}</h3>
+                  </div>
+                  <div className="center-el">
+                    <h3>{guest.arrivalDate}</h3>
+                    <h3>{guest.departureDate}</h3>
+                  </div>
+                  <div className="center-el">
+                    <h3>Agent</h3>
+                    <h3>{guest.bookingAgent}</h3>
+                  </div>
+                  <div className="center-el">
+                    <h3>Zimmertyp</h3>
+                    <h3>{guest.roomType}</h3>
+                  </div>
+                  <div className="center-el">
+                    <h3>Preis</h3>
+                    <h3>{guest.price} €</h3>
+                  </div>
+                </div>
+
+                {isOpen === guest.id && (
+                  <div className="guest-card-open">
+                    <ul>
+                      <li>
+                        <strong>Erwachsene:</strong> {guest.adults}
+                      </li>
+
+                      <li>
+                        <strong>Kinder:</strong> {guest.children}
+                      </li>
+                      <li>
+                        <strong>Zimmertyp:</strong> {guest.roomType}
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <strong>Zahlungsart:</strong> KK
+                      </li>
+                      <li>
+                        <strong>Preis:</strong>
+                        {guest.price}€
+                      </li>
+                      <li>
+                        <strong>Datum:</strong>
+                        {guest.arrivalDate} / {guest.departureDate}
+                      </li>
+                    </ul>
+                    <div className="checkmarks">
+                      <button className="guest-card-btn">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="6"
+                          stroke="green"
+                          class="size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m4.5 12.75 6 6 9-13.5"
+                          />
+                        </svg>
+                      </button>
+                      <button className="guest-card-btn">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="6"
+                          stroke="red"
+                          class="size-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+        : guests.map((guest) => (
             <div
-              className="guest-card-short-info"
-              onClick={() => onClick(guest.id)}
+              key={guest.id}
+              className="guest-card"
+              // onClick={() => onClick(guest.id)}
+              style={isOpen === guest.id ? { backgroundColor: "#dde9e1" } : {}}
             >
-              <div>
-                <h3>{guest.firstName + " " + guest.lastName}</h3>
-              </div>
-              <div className="center-el">
-                <h3>{guest.arrivalDate}</h3>
-                <h3>{guest.departureDate}</h3>
-              </div>
-              <div className="center-el">
-                <h3>Agent</h3>
-                <h3>{guest.bookingAgent}</h3>
-              </div>
-              <div className="center-el">
-                <h3>Zimmertyp</h3>
-                <h3>{guest.roomType}</h3>
-              </div>
-              <div className="center-el">
-                <h3>Preis</h3>
-                <h3>{guest.price} €</h3>
-              </div>
-            </div>
-
-            {isOpen === guest.id && (
-              <div className="guest-card-open">
-                <ul>
-                  <li>
-                    <strong>Erwachsene:</strong> {guest.adults}
-                  </li>
-
-                  <li>
-                    <strong>Kinder:</strong> {guest.children}
-                  </li>
-                  <li>
-                    <strong>Zimmertyp:</strong> {guest.roomType}
-                  </li>
-                </ul>
-                <ul>
-                  <li>
-                    <strong>Zahlungsart:</strong> KK
-                  </li>
-                  <li>
-                    <strong>Preis:</strong>
-                    {guest.price}€
-                  </li>
-                  <li>
-                    <strong>Datum:</strong>
-                    {guest.arrivalDate} / {guest.departureDate}
-                  </li>
-                </ul>
-                <div className="checkmarks">
-                  <button className="guest-card-btn">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="6"
-                      stroke="green"
-                      class="size-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m4.5 12.75 6 6 9-13.5"
-                      />
-                    </svg>
-                  </button>
-                  <button className="guest-card-btn">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="6"
-                      stroke="red"
-                      class="size-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+              <div
+                className="guest-card-short-info"
+                onClick={() => onClick(guest.id)}
+              >
+                <div>
+                  <h3>{guest.firstName + " " + guest.lastName}</h3>
+                </div>
+                <div className="center-el">
+                  <h3>{guest.arrivalDate}</h3>
+                  <h3>{guest.departureDate}</h3>
+                </div>
+                <div className="center-el">
+                  <h3>Agent</h3>
+                  <h3>{guest.bookingAgent}</h3>
+                </div>
+                <div className="center-el">
+                  <h3>Zimmertyp</h3>
+                  <h3>{guest.roomType}</h3>
+                </div>
+                <div className="center-el">
+                  <h3>Preis</h3>
+                  <h3>{guest.price} €</h3>
                 </div>
               </div>
-            )}
-          </div>
-        ))}
+
+              {isOpen === guest.id && (
+                <div className="guest-card-open">
+                  <ul>
+                    <li>
+                      <strong>Erwachsene:</strong> {guest.adults}
+                    </li>
+
+                    <li>
+                      <strong>Kinder:</strong> {guest.children}
+                    </li>
+                    <li>
+                      <strong>Zimmertyp:</strong> {guest.roomType}
+                    </li>
+                  </ul>
+                  <ul>
+                    <li>
+                      <strong>Zahlungsart:</strong> KK
+                    </li>
+                    <li>
+                      <strong>Preis:</strong>
+                      {guest.price}€
+                    </li>
+                    <li>
+                      <strong>Datum:</strong>
+                      {guest.arrivalDate} / {guest.departureDate}
+                    </li>
+                  </ul>
+                  <div className="checkmarks">
+                    <button className="guest-card-btn">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="6"
+                        stroke="green"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    </button>
+                    <button className="guest-card-btn">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="6"
+                        stroke="red"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
     </div>
   );
 }

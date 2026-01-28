@@ -408,16 +408,23 @@ a {
   cursor: pointer;
   background-color: transparent;
 }
-.btn-absolute-add-new-guest {
+.btn-absolute-add-new-guest,
+.btn-absolute-show-all-guests {
   font-size: 2rem;
   font-weight: 400;
   padding: 2rem 2rem;
   position: absolute;
-  top: 10%;
-  left: 15%;
   border: none;
   cursor: pointer;
   background-color: transparent;
+}
+.btn-absolute-add-new-guest {
+  top: 10%;
+  left: 10%;
+}
+.btn-absolute-show-all-guests {
+  top: 10%;
+  left: 15%;
 }
 
 .guest-flex {
@@ -494,11 +501,13 @@ a {
   flex: 1;
 }
 .stats-add-btn {
-  height: 2.5rem;
+  height: 3rem;
   transition: all 0.3s;
+  font-size: 5rem;
+  border: none;
 }
 .stats-add-btn:hover {
-  height: 3rem;
+  height: 3.5rem;
   stroke: #2d6a4f;
 }
 
