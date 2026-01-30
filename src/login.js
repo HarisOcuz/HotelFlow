@@ -15,7 +15,6 @@ function LoginForm({ authStatus, setAuthStatus }) {
   const [password, setPassword] = useState("");
   const [userError, setUserError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const submitButtonRef = useRef(null);
 
   function handleUser(e) {
     setUser(e.target.value);

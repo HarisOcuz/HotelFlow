@@ -1,5 +1,4 @@
 import { useState } from "react";
-import AddNewArrival from "./AddNewArrivals";
 import { todaysDate } from "./todaysDate";
 
 const date = new Date().toISOString().split("T")[0];

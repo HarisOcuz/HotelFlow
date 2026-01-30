@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import MainUi from "./mainUI";
+import { useState } from "react";
+// import MainUi from "./mainUI";
 
 const date = new Date().toISOString().split("T")[0];
 // const todaysDate = date.toLocaleDateString("de-DE"); // Europski format
@@ -23,7 +23,6 @@ function AddNewArrival({
   const [children, setChildren] = useState("");
   const [agent, setAgent] = useState("");
   const [price, setPrice] = useState("");
-  const [newGuestObj, setNewGuestObj] = useState({});
   const [roomType, setRoomType] = useState("SEZ");
 
   // Calculating the difference between arrival and departure (in # of nights)
@@ -119,7 +118,6 @@ function AddNewArrival({
     if (departureDate < arrivalDate) return;
     setDepartureDate(e.target.value);
   }
-  console.log(newGuestObj);
 
   function handleCloseAddNewGuestForm() {
     setAddNewArrivalBtn(!addNewArrivalBtn);
