@@ -64,6 +64,7 @@ html {
 }
 .btn-login:hover {
   transform: scale(1.08);
+  box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
 }
 .login-title {
   font-size: 2rem;
@@ -408,6 +409,7 @@ a {
   cursor: pointer;
   background-color: transparent;
 }
+
 .btn-absolute-add-new-guest,
 .btn-absolute-show-all-guests {
   font-size: 2rem;
@@ -425,6 +427,23 @@ a {
 .btn-absolute-show-all-guests {
   top: 10%;
   left: 15%;
+}
+.btn-absolute-show-all-guests {
+  top: 10%;
+  left: 15%;
+}
+.tooltip {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #1b4332;
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.3s;
+  position: absolute;
+}
+.btn-absolute-show-all-guests:hover .tooltip,
+.btn-absolute-statistics:hover .tooltip {
+  opacity: 1;
 }
 
 .guest-flex {
@@ -536,6 +555,11 @@ ul {
 .log-out {
   margin-top: 5rem;
   transition: all 0.5s;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+}
+
+.log-out:hover {
+  box-shadow: 0 10px 14px rgba(0, 0, 0, 0.2);
 }
 
 .checkmarks {
