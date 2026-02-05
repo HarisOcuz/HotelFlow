@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { todaysDate } from "./todaysDate";
+import { DepartingGuests } from "./DepartingGuests";
+import { InHouseGuests } from "./InHouseGuests";
 
 const date = new Date().toISOString().split("T")[0];
 console.log(date);
@@ -11,11 +13,20 @@ function MainUi({
   setAddNewArrivalBtn,
   newGuestObj,
   guests,
+  setGuests,
   arrivalDate,
   departureDate,
 }) {
   const [siteOpen, setSiteOpen] = useState("");
   const [showAllArrivals, setShowAllArrivals] = useState(false);
+  const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
+  const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
+
+  function handleOnClickOpenGuestCard(id) {
+    console.log(id);
+    if (isOpenGuestCard === id) setIsOpenGuestCard(null);
+    else setIsOpenGuestCard(id);
+  }
 
   function handleShowAllArrivals() {
     console.log(showAllArrivals);
@@ -47,6 +58,12 @@ function MainUi({
           <MainWindowShortInfo setSiteOpen={setSiteOpen} />
         ) : siteOpen === "Anreisen" ? (
           <Arrivals
+            setGuests={setGuests}
+            handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
+            isOpenSidePanel={isOpenSidePanel}
+            setIsOpenSidePanel={setIsOpenSidePanel}
+            isOpenGuestCard={isOpenGuestCard}
+            setIsOpenGuestCard={setIsOpenGuestCard}
             addNewArrivalBtn={addNewArrivalBtn}
             setAddNewArrivalBtn={setAddNewArrivalBtn}
             guests={guests}
@@ -55,9 +72,14 @@ function MainUi({
             setShowAllArrivals={setShowAllArrivals}
           />
         ) : siteOpen === "Abreisen" ? (
-          <Departures />
+          <Departures
+            handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
+            guests={guests}
+            isOpenGuestCard={isOpenGuestCard}
+            setIsOpenGuestCard={setIsOpenGuestCard}
+          />
         ) : siteOpen === "Im Haus" ? (
-          <InHaus />
+          <InHaus guests={guests} />
         ) : siteOpen === "Zimmer Management" ? (
           <RoomMenagamenet />
         ) : siteOpen === "Mitarbeiter" ? (
@@ -291,29 +313,39 @@ function ShortInfo({ text, nummer, className, setSiteOpen }) {
 function Arrivals({
   addNewArrivalBtn,
   setAddNewArrivalBtn,
+  setGuests,
   guests,
   showAllArrivals,
   setShowAllArrivals,
   onShowAllArrivals,
+  isOpenGuestCard,
+  setIsOpenGuestCard,
+  setIsOpenSidePanel,
+  isOpenSidePanel,
+  handleOnClickOpenGuestCard,
 }) {
-  const [isOpen, setIsOpen] = useState(null);
-  const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
+  // ! Stats for todays arrivals
 
-  // Stats for todays arrivals
-  const totalAdultsArrivals = guests
-    .filter((guest) => guest.arrivalDate === todaysDate(date))
-    .reduce((acc, guest) => acc + guest.adults, 0);
-  const totalKidsArrivals = guests
-    .filter((guest) => guest.arrivalDate === todaysDate(date))
-    .reduce((acc, guest) => acc + guest.children, 0);
-  const averagePricePerRoomArrivals = (
-    guests
-      .filter((guest) => guest.arrivalDate === todaysDate(date))
-      .reduce((acc, guest) => acc + guest.price, 0) /
-    guests.filter((guest) => guest.arrivalDate === todaysDate(date)).length
-  ).toFixed(2);
+  const totalArrivalsToday = guests.filter(
+    (guest) =>
+      guest.arrivalDate === todaysDate(date) && guest.inHouse === false,
+  );
 
-  // Stats for arrivals in total
+  const totalAdultsArrivals = totalArrivalsToday.reduce(
+    (acc, guest) => acc + guest.adults,
+    0,
+  );
+
+  const totalKidsArrivals = totalArrivalsToday.reduce(
+    (acc, guest) => acc + guest.children,
+    0,
+  );
+
+  const averagePricePerRoomArrivals =
+    totalArrivalsToday.reduce((acc, guest) => acc + guest.price, 0) /
+    totalArrivalsToday.length;
+
+  // ! Stats for arrivals in total
 
   const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
   const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
@@ -328,12 +360,6 @@ function Arrivals({
   function handleOpenSidePanel() {
     console.log("open");
     setIsOpenSidePanel(!isOpenSidePanel);
-  }
-
-  function handleOnClick(id) {
-    console.log(id);
-    if (isOpen === id) setIsOpen(null);
-    else setIsOpen(id);
   }
 
   return (
@@ -367,8 +393,9 @@ function Arrivals({
 
       <div className="ui-container arrivals-container">
         <GuestsArrivalToday
-          onClick={handleOnClick}
-          isOpen={isOpen}
+          setGuests={setGuests}
+          onClick={handleOnClickOpenGuestCard}
+          isOpen={isOpenGuestCard}
           guests={guests}
           showAllArrivals={showAllArrivals}
         />
@@ -478,6 +505,14 @@ function SideShortInfoArrivals({
                 <span>
                   {
                     guests.filter(
+                      (guest) =>
+                        guest.arrivalDate === todaysDate(date) &&
+                        guest.inHouse === false,
+                    ).length
+                  }{" "}
+                  /{" "}
+                  {
+                    guests.filter(
                       (guest) => guest.arrivalDate === todaysDate(date),
                     ).length
                   }
@@ -524,14 +559,31 @@ function SideShortInfoArrivals({
 
 console.log(todaysDate());
 
-function GuestsArrivalToday({ isOpen, onClick, guests, showAllArrivals }) {
+function GuestsArrivalToday({
+  isOpen,
+  onClick,
+  guests,
+  showAllArrivals,
+  setGuests,
+}) {
   console.log(showAllArrivals);
+
+  function handleCheckGuestIn() {
+    const updatedGuestsAfterCheckIn = guests.map((guest) =>
+      guest.id === isOpen ? { ...guest, inHouse: true } : guest,
+    );
+    setGuests(updatedGuestsAfterCheckIn);
+  }
 
   return (
     <div className="guest-flex">
       {showAllArrivals === false
         ? guests
-            .filter((guest) => guest.arrivalDate === todaysDate(date))
+            .filter(
+              (guest) =>
+                guest.arrivalDate === todaysDate(date) &&
+                guest.inHouse === false,
+            )
             .map((guest) => (
               <div
                 key={guest.id}
@@ -594,7 +646,10 @@ function GuestsArrivalToday({ isOpen, onClick, guests, showAllArrivals }) {
                       </li>
                     </ul>
                     <div className="checkmarks">
-                      <button className="guest-card-btn">
+                      <button
+                        className="guest-card-btn"
+                        onClick={handleCheckGuestIn}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -732,18 +787,21 @@ function GuestsArrivalToday({ isOpen, onClick, guests, showAllArrivals }) {
   );
 }
 
-function Departures() {
+function Departures({ guests, handleOnClickOpenGuestCard }) {
   return (
     <div className="ui-container departure-container">
-      <h1>Abreisen</h1>
+      <DepartingGuests
+        handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
+        guests={guests}
+      />
     </div>
   );
 }
 
-function InHaus() {
+function InHaus({ guests }) {
   return (
     <div className="ui-container in-house-container">
-      <h1>Im Haus</h1>
+      <InHouseGuests guests={guests} />
     </div>
   );
 }

@@ -121,7 +121,7 @@ function App() {
       adults: 2,
       children: 1,
       price: 69,
-      inHouse: false,
+      inHouse: true,
       roomType: "SDZ",
     },
     {
@@ -166,6 +166,7 @@ function App() {
     <div className="App">
       {authStatus ? (
         <MainUi
+          setGuests={setGuests}
           guests={guests}
           authStatus={authStatus}
           setAuthStatus={setAuthStatus}
