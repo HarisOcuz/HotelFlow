@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { todaysDate } from "./todaysDate";
+
+const date = new Date().toISOString().split("T")[0];
 
 export function DepartingGuests({ guests }) {
   const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
@@ -12,7 +15,7 @@ export function DepartingGuests({ guests }) {
   return (
     <div className="guest-flex">
       {guests
-        .filter((guest) => guest.departureDate === "05.02.2026")
+        .filter((guest) => guest.departureDate === todaysDate(date))
         .map((guest) => (
           <div
             key={guest.id}

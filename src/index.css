@@ -398,7 +398,7 @@ a {
   backdrop-filter: blur(6px);
   z-index: 0;
 }
-.btn-absolute-statistics {
+/* .btn-absolute-statistics {
   font-size: 2rem;
   font-weight: 400;
   padding: 2rem 2rem;
@@ -408,10 +408,16 @@ a {
   border: none;
   cursor: pointer;
   background-color: transparent;
+} */
+
+.btn-absolute-statistics {
+  top: 10%;
+  right: 1.5%;
 }
 
 .btn-absolute-add-new-guest,
-.btn-absolute-show-all-guests {
+.btn-absolute-show-all-guests,
+.btn-absolute-statistics {
   font-size: 2rem;
   font-weight: 400;
   padding: 2rem 2rem;
@@ -461,7 +467,6 @@ a {
   justify-content: center;
   width: 10rem;
   height: 8rem;
-  border-display: none;
   border-radius: 4rem;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
@@ -548,6 +553,27 @@ a {
 ul {
   list-style: none;
 }
+.change-log {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  padding: 5rem 10rem;
+  background-color: #dde9e175;
+  border-radius: 8rem;
+  border: 2px solid #2d6a4f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.overlay-notification {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 0;
+}
+
 .center-el {
   margin-left: 8rem;
 }

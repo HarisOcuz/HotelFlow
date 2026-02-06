@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { todaysDate } from "./todaysDate";
 import { DepartingGuests } from "./DepartingGuests";
 import { InHouseGuests } from "./InHouseGuests";
+import { ChangeNotification } from "./ChangeNotification";
 
 const date = new Date().toISOString().split("T")[0];
 console.log(date);
@@ -21,6 +22,21 @@ function MainUi({
   const [showAllArrivals, setShowAllArrivals] = useState(false);
   const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
   const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
+  const [bookingCanceled, setBookingCanceled] = useState();
+
+  useEffect(() => {
+    setBookingCanceled(isOpenGuestCard ? true : false);
+  }, [isOpenGuestCard]);
+
+  function handleCancelGuestBooking() {
+    if (bookingCanceled) {
+      const bookingsUpdated = guests.filter(
+        (guest) => guest.id !== isOpenGuestCard,
+      );
+      setGuests(bookingsUpdated);
+      setBookingCanceled(false);
+    }
+  }
 
   function handleOnClickOpenGuestCard(id) {
     console.log(id);
@@ -58,6 +74,8 @@ function MainUi({
           <MainWindowShortInfo setSiteOpen={setSiteOpen} />
         ) : siteOpen === "Anreisen" ? (
           <Arrivals
+            bookingCanceled={bookingCanceled}
+            handleCancelGuestBooking={handleCancelGuestBooking}
             setGuests={setGuests}
             handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
             isOpenSidePanel={isOpenSidePanel}
@@ -323,6 +341,8 @@ function Arrivals({
   setIsOpenSidePanel,
   isOpenSidePanel,
   handleOnClickOpenGuestCard,
+  handleCancelGuestBooking,
+  bookingCanceled,
 }) {
   // ! Stats for todays arrivals
 
@@ -398,7 +418,10 @@ function Arrivals({
           isOpen={isOpenGuestCard}
           guests={guests}
           showAllArrivals={showAllArrivals}
+          handleCancelGuestBooking={handleCancelGuestBooking}
+          bookingCanceled={bookingCanceled}
         />
+        {!bookingCanceled && <ChangeNotification />}
       </div>
       <SideShortInfoArrivals
         className={"btn-absolute-statistics"}
@@ -565,6 +588,8 @@ function GuestsArrivalToday({
   guests,
   showAllArrivals,
   setGuests,
+  handleCancelGuestBooking,
+  bookingCanceled,
 }) {
   console.log(showAllArrivals);
 
@@ -665,7 +690,10 @@ function GuestsArrivalToday({
                           />
                         </svg>
                       </button>
-                      <button className="guest-card-btn">
+                      <button
+                        className="guest-card-btn"
+                        onClick={handleCancelGuestBooking}
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -762,7 +790,10 @@ function GuestsArrivalToday({
                         />
                       </svg>
                     </button>
-                    <button className="guest-card-btn">
+                    <button
+                      className="guest-card-btn"
+                      onClick={handleCancelGuestBooking}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
