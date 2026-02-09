@@ -1,26 +1,46 @@
 import { useState } from "react";
 
-export function ChangeNotification() {
-  const [removeNotification, setRemoveNotification] = useState(false);
+// export function ChangeNotification({
+//   setBookingCanceled,
+//   bookingCanceled,
+//   guestCheckedIn,
+//   setGuestCheckedIn,
+//   children,
+// }) {
+//   const [removeNotification, setRemoveNotification] = useState(false);
 
-  function handleRemoveNotification() {
-    console.log(removeNotification);
+//   function handleRemoveNotification() {
+//     if (bookingCanceled) setBookingCanceled((prev) => !prev);
+//     if (guestCheckedIn) setGuestCheckedIn(false);
+//     setRemoveNotification((prev) => !prev);
+//   }
+//   return (
+//     <>
+//       {!removeNotification && (
+//         <>
+//           <div className="overlay-notification"></div>
+//           <div className="change-log">
+//             <h3>{children}</h3>
+//             <button onClick={handleRemoveNotification} className="btn">
+//               OK
+//             </button>
+//           </div>
+//         </>
+//       )}
+//     </>
+//   );
+// }
 
-    setRemoveNotification(true);
-  }
+export function ChangeNotification({ onClose, children }) {
   return (
     <>
-      {!removeNotification && (
-        <>
-          <div className="overlay-notification"></div>
-          <div className="change-log">
-            <h3>Buchung wurde storniert</h3>
-            <button onClick={handleRemoveNotification} className="btn">
-              OK
-            </button>
-          </div>
-        </>
-      )}
+      <div className="overlay-notification"></div>
+      <div className="change-log">
+        <h3>{children}</h3>
+        <button onClick={onClose} className="btn">
+          OK
+        </button>
+      </div>
     </>
   );
 }

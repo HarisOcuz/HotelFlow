@@ -75,24 +75,58 @@ export function DepartingGuests({ guests }) {
                   </li>
                 </ul>
                 <div className="checkmarks">
+                  {/* //! HERE TO ADD FUNCTION TO EDIT THE BOOKING / EXTEND BOOKING */}
+
                   <button className="guest-card-btn">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
+                      width="24"
+                      height="24"
                       viewBox="0 0 24 24"
-                      strokeWidth="6"
-                      stroke="green"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      // class="lucide lucide-calendar-cog-icon lucide-calendar-cog"
                       className="size-6"
+                      color="red"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m4.5 12.75 6 6 9-13.5"
-                      />
+                      <path d="m15.228 16.852-.923-.383" />
+                      <path d="m15.228 19.148-.923.383" />
+                      <path d="M16 2v4" />
+                      <path d="m16.47 14.305.382.923" />
+                      <path d="m16.852 20.772-.383.924" />
+                      <path d="m19.148 15.228.383-.923" />
+                      <path d="m19.53 21.696-.382-.924" />
+                      <path d="m20.772 16.852.924-.383" />
+                      <path d="m20.772 19.148.924.383" />
+                      <path d="M21 10.592V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6" />
+                      <path d="M3 10h18" />
+                      <path d="M8 2v4" />
+                      <circle cx="18" cy="18" r="3" />
                     </svg>
                   </button>
                   <button className="guest-card-btn">
                     <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      // class="lucide lucide-log-out-icon lucide-log-out"
+                      className="size-6"
+                      color="red"
+                    >
+                      <path d="m16 17 5-5-5-5" />
+                      <path d="M21 12H9" />
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    </svg>
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -105,7 +139,7 @@ export function DepartingGuests({ guests }) {
                         strokeLinejoin="round"
                         d="M6 18 18 6M6 6l12 12"
                       />
-                    </svg>
+                    </svg> */}
                   </button>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useState } from "react";
 import { todaysDate } from "./todaysDate";
 import { DepartingGuests } from "./DepartingGuests";
 import { InHouseGuests } from "./InHouseGuests";
@@ -22,19 +22,22 @@ function MainUi({
   const [showAllArrivals, setShowAllArrivals] = useState(false);
   const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
   const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
-  const [bookingCanceled, setBookingCanceled] = useState();
-
-  useEffect(() => {
-    setBookingCanceled(isOpenGuestCard ? true : false);
-  }, [isOpenGuestCard]);
+  const [bookingCanceled, setBookingCanceled] = useState(null);
+  const [guestCheckedIn, setGuestCheckedIn] = useState(null);
 
   function handleCancelGuestBooking() {
-    if (bookingCanceled) {
+    if (isOpenGuestCard >= 1) {
+      // 1. ukloni rezervaciju
       const bookingsUpdated = guests.filter(
         (guest) => guest.id !== isOpenGuestCard,
       );
       setGuests(bookingsUpdated);
-      setBookingCanceled(false);
+
+      // 2. pokaži notifikaciju
+      setBookingCanceled(true);
+
+      // 3. resetiraj prozor
+      setIsOpenGuestCard(null);
     }
   }
 
@@ -74,6 +77,9 @@ function MainUi({
           <MainWindowShortInfo setSiteOpen={setSiteOpen} />
         ) : siteOpen === "Anreisen" ? (
           <Arrivals
+            guestCheckedIn={guestCheckedIn}
+            setGuestCheckedIn={setGuestCheckedIn}
+            setBookingCanceled={setBookingCanceled}
             bookingCanceled={bookingCanceled}
             handleCancelGuestBooking={handleCancelGuestBooking}
             setGuests={setGuests}
@@ -334,15 +340,16 @@ function Arrivals({
   setGuests,
   guests,
   showAllArrivals,
-  setShowAllArrivals,
   onShowAllArrivals,
   isOpenGuestCard,
-  setIsOpenGuestCard,
   setIsOpenSidePanel,
   isOpenSidePanel,
   handleOnClickOpenGuestCard,
   handleCancelGuestBooking,
   bookingCanceled,
+  setBookingCanceled,
+  guestCheckedIn,
+  setGuestCheckedIn,
 }) {
   // ! Stats for todays arrivals
 
@@ -420,8 +427,23 @@ function Arrivals({
           showAllArrivals={showAllArrivals}
           handleCancelGuestBooking={handleCancelGuestBooking}
           bookingCanceled={bookingCanceled}
+          setGuestCheckedIn={setGuestCheckedIn}
+          guestCheckedIn={guestCheckedIn}
         />
-        {!bookingCanceled && <ChangeNotification />}
+        {bookingCanceled && (
+          <ChangeNotification
+            children="Buchung wurde storniert"
+            setBookingCanceled={setBookingCanceled}
+            onClose={() => setBookingCanceled(false)}
+          />
+        )}
+        {guestCheckedIn && (
+          <ChangeNotification
+            children="Gast ist eingecheckt"
+            setGuestCheckedIn={setGuestCheckedIn}
+            onClose={() => setGuestCheckedIn(false)}
+          />
+        )}
       </div>
       <SideShortInfoArrivals
         className={"btn-absolute-statistics"}
@@ -589,11 +611,15 @@ function GuestsArrivalToday({
   showAllArrivals,
   setGuests,
   handleCancelGuestBooking,
-  bookingCanceled,
+  setGuestCheckedIn,
 }) {
   console.log(showAllArrivals);
 
   function handleCheckGuestIn() {
+    console.log("radi");
+
+    setGuestCheckedIn((prev) => !prev);
+
     const updatedGuestsAfterCheckIn = guests.map((guest) =>
       guest.id === isOpen ? { ...guest, inHouse: true } : guest,
     );
@@ -777,17 +803,31 @@ function GuestsArrivalToday({
                     <button className="guest-card-btn">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
+                        width="24"
+                        height="24"
                         viewBox="0 0 24 24"
-                        stroke-width="6"
-                        stroke="green"
-                        class="size-6"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        // class="lucide lucide-calendar-cog-icon lucide-calendar-cog"
+                        className="size-6"
+                        color="red"
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m4.5 12.75 6 6 9-13.5"
-                        />
+                        <path d="m15.228 16.852-.923-.383" />
+                        <path d="m15.228 19.148-.923.383" />
+                        <path d="M16 2v4" />
+                        <path d="m16.47 14.305.382.923" />
+                        <path d="m16.852 20.772-.383.924" />
+                        <path d="m19.148 15.228.383-.923" />
+                        <path d="m19.53 21.696-.382-.924" />
+                        <path d="m20.772 16.852.924-.383" />
+                        <path d="m20.772 19.148.924.383" />
+                        <path d="M21 10.592V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6" />
+                        <path d="M3 10h18" />
+                        <path d="M8 2v4" />
+                        <circle cx="18" cy="18" r="3" />
                       </svg>
                     </button>
                     <button
