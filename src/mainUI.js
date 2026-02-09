@@ -3,7 +3,6 @@ import { todaysDate } from "./todaysDate";
 import { DepartingGuests } from "./DepartingGuests";
 import { InHouseGuests } from "./InHouseGuests";
 import { ChangeNotification } from "./ChangeNotification";
-import { Updates } from "./Updates";
 
 const date = new Date().toISOString().split("T")[0];
 console.log(date);
