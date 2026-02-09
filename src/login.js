@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Updates } from "./Updates";
 
 export default Login;
 
@@ -52,45 +53,51 @@ function LoginForm({ authStatus, setAuthStatus }) {
   }
 
   return (
-    <form className="login-form" onSubmit={handleLoginSubmit}>
-      <img
-        className="logo-login"
-        src="/Hotel_Flow__1_-removebg-preview.png"
-        alt="App Logo"
-      />
-      {/* <h3 className="login-title">Login</h3> */}
-      <input
-        className="input-field"
-        type="text"
-        placeholder="Benutzername"
-        value={user}
-        onChange={handleUser}
-        style={userError ? { border: "1.5px solid red" } : {}}
-      />
-      <input
-        className="input-field"
-        type="password"
-        placeholder="Kenwort"
-        value={password}
-        onChange={handlePassword}
-        style={passwordError ? { border: "1.5px solid red" } : {}}
-      />
-      <button className="btn btn-login">Anmelden</button>
-      <div className="user-data-login-container">
-        <ul className="user-data-login">
-          <li>Bitte folgende Daten verwenden:</li>
-          <li>Haris</li>
-          <li>1846</li>
-          <li>
-            oder
-            <strong className="redirection" onClick={handleAutoComplete}>
-              {" "}
-              hier{" "}
-            </strong>
-            klicken
-          </li>
-        </ul>
-      </div>
-    </form>
+    <>
+      <form className="login-form" onSubmit={handleLoginSubmit}>
+        <img
+          className="logo-login"
+          src="/Hotel_Flow__1_-removebg-preview.png"
+          alt="App Logo"
+        />
+        {/* <h3 className="login-title">Login</h3> */}
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Benutzername"
+          value={user}
+          onChange={handleUser}
+          style={userError ? { border: "1.5px solid red" } : {}}
+        />
+        <input
+          className="input-field"
+          type="password"
+          placeholder="Kenwort"
+          value={password}
+          onChange={handlePassword}
+          style={passwordError ? { border: "1.5px solid red" } : {}}
+        />
+        <button className="btn btn-login">Anmelden</button>
+        <div className="user-data-login-container">
+          <ul className="user-data-login">
+            <li>Bitte folgende Daten verwenden:</li>
+            <li>Haris</li>
+            <li>1846</li>
+            <li>
+              oder
+              <strong className="redirection" onClick={handleAutoComplete}>
+                {" "}
+                hier{" "}
+              </strong>
+              klicken
+            </li>
+          </ul>
+        </div>
+      </form>
+      {alert(
+        "Optimiert für Desktop-Workflows: Aufgrund der Komplexität des PMS ist keine Responsivität für Mobilgeräte geplant.",
+      )}
+      <Updates />
+    </>
   );
 }
