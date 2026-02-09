@@ -565,7 +565,14 @@ function SideShortInfoArrivals({
               </div>
               <div className="side-short-info">
                 <span>⌀ Preis</span>
-                <span>{averagePricePerRoomArrivals}€</span>
+
+                <span>
+                  {Number.isFinite(averagePricePerRoomArrivals) &&
+                  averagePricePerRoomArrivals > 0
+                    ? averagePricePerRoomArrivals.toFixed(2).replace(".", ",")
+                    : "0,00"}
+                  €
+                </span>
               </div>
               <div className="side-short-info">
                 <span>Erwachsene</span>

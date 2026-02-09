@@ -6,6 +6,9 @@ export default Login;
 function Login({ authStatus, setAuthStatus }) {
   return (
     <div className="container">
+      {alert(
+        "Optimiert für Desktop-Workflows: Aufgrund der Komplexität des PMS ist keine Responsivität für Mobilgeräte geplant.",
+      )}
       <LoginForm authStatus={authStatus} setAuthStatus={setAuthStatus} />
     </div>
   );
@@ -94,9 +97,7 @@ function LoginForm({ authStatus, setAuthStatus }) {
           </ul>
         </div>
       </form>
-      {alert(
-        "Optimiert für Desktop-Workflows: Aufgrund der Komplexität des PMS ist keine Responsivität für Mobilgeräte geplant.",
-      )}
+
       <Updates />
     </>
   );
