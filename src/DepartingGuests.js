@@ -3,13 +3,22 @@ import { todaysDate } from "./todaysDate";
 
 const date = new Date().toISOString().split("T")[0];
 
-export function DepartingGuests({ guests }) {
+export function DepartingGuests({
+  guests,
+  setGuests,
+  setGuestCheckedOut,
+  guestsCheckedOut,
+}) {
   const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
 
   function handleOnClickOpenGuestCard(id) {
     console.log(id);
     if (isOpenGuestCard === id) setIsOpenGuestCard(null);
     else setIsOpenGuestCard(id);
+  }
+  function handleCheckOut() {
+    setGuests((prev) => prev.filter((guest) => guest.id !== isOpenGuestCard));
+    setGuestCheckedOut(true);
   }
 
   return (
@@ -107,7 +116,10 @@ export function DepartingGuests({ guests }) {
                       <circle cx="18" cy="18" r="3" />
                     </svg>
                   </button>
-                  <button className="guest-card-btn">
+
+                  {/* //! HERE TO ADD FUNCTION FOR THE CHECKOUT */}
+
+                  <button onClick={handleCheckOut} className="guest-card-btn">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"

@@ -62,6 +62,7 @@ function LoginForm({ authStatus, setAuthStatus }) {
           className="logo-login"
           src="/Hotel_Flow__1_-removebg-preview.png"
           alt="App Logo"
+          loading="eager"
         />
         {/* <h3 className="login-title">Login</h3> */}
         <input

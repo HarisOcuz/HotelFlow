@@ -9,14 +9,10 @@ console.log(date);
 
 function MainUi({
   setAuthStatus,
-  authStatus,
   addNewArrivalBtn,
   setAddNewArrivalBtn,
-  newGuestObj,
   guests,
   setGuests,
-  arrivalDate,
-  departureDate,
 }) {
   const [siteOpen, setSiteOpen] = useState("");
   const [showAllArrivals, setShowAllArrivals] = useState(false);
@@ -24,6 +20,44 @@ function MainUi({
   const [isOpenSidePanel, setIsOpenSidePanel] = useState(false);
   const [bookingCanceled, setBookingCanceled] = useState(null);
   const [guestCheckedIn, setGuestCheckedIn] = useState(null);
+  const [guestCheckedOut, setGuestCheckedOut] = useState(false);
+
+  // ! Stats for  today (In house, arrivals, departures)
+  const totalArrivalsToday = guests.filter(
+    (guest) =>
+      guest.arrivalDate === todaysDate(date) && guest.inHouse === false,
+  );
+
+  const totalDeparturesToday = guests.filter(
+    (guest) => guest.departureDate === todaysDate(date),
+  ).length;
+  console.log(totalArrivalsToday.length, totalDeparturesToday);
+
+  const totalInHouseGuests = guests.filter(
+    (guest) => guest.inHouse === true,
+  ).length;
+
+  const totalAdultsArrivals = totalArrivalsToday.reduce(
+    (acc, guest) => acc + guest.adults,
+    0,
+  );
+
+  const totalKidsArrivals = totalArrivalsToday.reduce(
+    (acc, guest) => acc + guest.children,
+    0,
+  );
+
+  const averagePricePerRoomArrivals =
+    totalArrivalsToday.reduce((acc, guest) => acc + guest.price, 0) /
+    totalArrivalsToday.length;
+
+  // ! Stats for arrivals in total
+
+  const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
+  const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
+  const averagePricePerRoom = (
+    guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
+  ).toFixed(2);
 
   function handleCancelGuestBooking() {
     if (isOpenGuestCard >= 1) {
@@ -33,10 +67,8 @@ function MainUi({
       );
       setGuests(bookingsUpdated);
 
-      // 2. pokaži notifikaciju
       setBookingCanceled(true);
 
-      // 3. resetiraj prozor
       setIsOpenGuestCard(null);
     }
   }
@@ -74,7 +106,12 @@ function MainUi({
       <div className="dashboard-container">
         <NavBar />
         {siteOpen === "" ? (
-          <MainWindowShortInfo setSiteOpen={setSiteOpen} />
+          <MainWindowShortInfo
+            totalArrivalsToday={totalArrivalsToday}
+            totalDeparturesToday={totalDeparturesToday}
+            totalInHouseGuests={totalInHouseGuests}
+            setSiteOpen={setSiteOpen}
+          />
         ) : siteOpen === "Anreisen" ? (
           <Arrivals
             guestCheckedIn={guestCheckedIn}
@@ -94,13 +131,23 @@ function MainUi({
             showAllArrivals={showAllArrivals}
             onShowAllArrivals={handleShowAllArrivals}
             setShowAllArrivals={setShowAllArrivals}
+            totalArrivalsToday={totalArrivalsToday}
+            totalKidsArrivals={totalKidsArrivals}
+            averagePricePerRoomArrivals={averagePricePerRoomArrivals}
+            totalAdults={totalAdults}
+            totalAdultsArrivals={totalAdultsArrivals}
+            totalKids={totalKids}
+            averagePricePerRoom={averagePricePerRoom}
           />
         ) : siteOpen === "Abreisen" ? (
           <Departures
             handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
+            setGuests={setGuests}
             guests={guests}
             isOpenGuestCard={isOpenGuestCard}
             setIsOpenGuestCard={setIsOpenGuestCard}
+            guestCheckedOut={guestCheckedOut}
+            setGuestCheckedOut={setGuestCheckedOut}
           />
         ) : siteOpen === "Im Haus" ? (
           <InHaus guests={guests} />
@@ -292,26 +339,31 @@ function NavBar() {
 
 // SHORT INFO - STATS
 
-function MainWindowShortInfo({ setSiteOpen }) {
+function MainWindowShortInfo({
+  setSiteOpen,
+  totalArrivalsToday,
+  totalDeparturesToday,
+  totalInHouseGuests,
+}) {
   return (
     <div className="mainWindow-container">
       <ShortInfo
         setSiteOpen={setSiteOpen}
         className="mainWindow-short-info"
         text="Anreisen"
-        nummer="18"
+        nummer={totalArrivalsToday.length}
       />
       <ShortInfo
         setSiteOpen={setSiteOpen}
         className="mainWindow-short-info mainWindow-short-info-abreisen"
         text="Abreisen"
-        nummer="3"
+        nummer={totalDeparturesToday}
       />
       <ShortInfo
         setSiteOpen={setSiteOpen}
         className="mainWindow-short-info mainWindow-short-info-im-haus"
         text="Im Haus"
-        nummer="4"
+        nummer={totalInHouseGuests}
       />
       <ShortInfo
         setSiteOpen={setSiteOpen}
@@ -350,36 +402,14 @@ function Arrivals({
   setBookingCanceled,
   guestCheckedIn,
   setGuestCheckedIn,
+  totalAdults,
+  totalAdultsArrivals,
+  totalArrivalsToday,
+  totalKids,
+  totalKidsArrivals,
+  averagePricePerRoom,
+  averagePricePerRoomArrivals,
 }) {
-  // ! Stats for todays arrivals
-
-  const totalArrivalsToday = guests.filter(
-    (guest) =>
-      guest.arrivalDate === todaysDate(date) && guest.inHouse === false,
-  );
-
-  const totalAdultsArrivals = totalArrivalsToday.reduce(
-    (acc, guest) => acc + guest.adults,
-    0,
-  );
-
-  const totalKidsArrivals = totalArrivalsToday.reduce(
-    (acc, guest) => acc + guest.children,
-    0,
-  );
-
-  const averagePricePerRoomArrivals =
-    totalArrivalsToday.reduce((acc, guest) => acc + guest.price, 0) /
-    totalArrivalsToday.length;
-
-  // ! Stats for arrivals in total
-
-  const totalAdults = guests.reduce((acc, guest) => acc + guest.adults, 0);
-  const totalKids = guests.reduce((acc, guest) => acc + guest.children, 0);
-  const averagePricePerRoom = (
-    guests.reduce((acc, guest) => acc + guest.price, 0) / guests.length
-  ).toFixed(2);
-
   function handleAddNewArrivalBtn() {
     setAddNewArrivalBtn(true);
   }
@@ -865,13 +895,31 @@ function GuestsArrivalToday({
   );
 }
 
-function Departures({ guests, handleOnClickOpenGuestCard }) {
+function Departures({
+  guests,
+  setGuests,
+  handleOnClickOpenGuestCard,
+  guestCheckedOut,
+  setGuestCheckedOut,
+  isOpenGuestCard,
+}) {
+  // ! Checking guests out
+
   return (
     <div className="ui-container departure-container">
       <DepartingGuests
         handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
         guests={guests}
+        setGuests={setGuests}
+        guestCheckedOut={guestCheckedOut}
+        setGuestCheckedOut={setGuestCheckedOut}
       />
+      {guestCheckedOut && (
+        <ChangeNotification
+          children={"Gast ist ausgecheckt"}
+          onClose={() => setGuestCheckedOut((prev) => !prev)}
+        />
+      )}
     </div>
   );
 }
