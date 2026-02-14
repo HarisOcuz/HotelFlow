@@ -8,18 +8,6 @@ function UpdatingBookingInfo({
   selectedBookingEdit,
   setGuests,
 }) {
-  const [editedFirstName, setEditedFirstName] = useState(firstName);
-  const [editedLastName, setEditedLastName] = useState(lastName);
-  const [editedAdults, setEditedAdults] = useState(adults);
-  const [editedChildren, setEditedChildren] = useState(children);
-  const [editedBookingAgent, setEditedBookingAgent] = useState(bookingAgent);
-  const [editedPrice, setEditedPrice] = useState(price);
-  const [editedRoomType, setEditedRoomType] = useState(roomType);
-  const [editedArrivalDate, setEditedArrivalDate] = useState(arrivalDate);
-  const [editedDepartureDate, setEditedDepartureDate] = useState(departureDate);
-
-  if (!selectedBookingEdit) return null;
-
   const [
     {
       adults,
@@ -35,6 +23,18 @@ function UpdatingBookingInfo({
       roomType,
     },
   ] = selectedBookingEdit;
+
+  const [editedFirstName, setEditedFirstName] = useState(firstName);
+  const [editedLastName, setEditedLastName] = useState(lastName);
+  const [editedAdults, setEditedAdults] = useState(adults);
+  const [editedChildren, setEditedChildren] = useState(children);
+  const [editedBookingAgent, setEditedBookingAgent] = useState(bookingAgent);
+  const [editedPrice, setEditedPrice] = useState(price);
+  const [editedRoomType, setEditedRoomType] = useState(roomType);
+  const [editedArrivalDate, setEditedArrivalDate] = useState(arrivalDate);
+  const [editedDepartureDate, setEditedDepartureDate] = useState(departureDate);
+
+  if (!selectedBookingEdit) return null;
 
   const arrival = new Date(editedArrivalDate);
   const departure = new Date(editedDepartureDate);
