@@ -193,7 +193,7 @@ function App() {
 
   // OVO KASNIJE PREBACITI NA FALSE
 
-  const [authStatus, setAuthStatus] = useState(true);
+  const [authStatus, setAuthStatus] = useState(false);
   const [addNewArrivalBtn, setAddNewArrivalBtn] = useState(false);
   const [guests, setGuests] = useState([...guests2]);
   const [arrivalDate, setArrivalDate] = useState(date);

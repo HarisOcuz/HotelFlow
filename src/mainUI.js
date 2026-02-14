@@ -25,20 +25,18 @@ function MainUi({
   const [guestCheckedOut, setGuestCheckedOut] = useState(false);
   const [editGuestBooking, setEditGuestBooking] = useState(false);
 
-  function handleEditGuestBooking() {}
-
   // ! Stats for  today (In house, arrivals, departures)
   const totalArrivalsToday = guests.filter(
-    (guest) => guest.arrivalDate === date && guest.inHouse === false
+    (guest) => guest.arrivalDate === date && guest.inHouse === false,
   );
 
   const totalDeparturesToday = guests.filter(
-    (guest) => guest.departureDate === date
+    (guest) => guest.departureDate === date,
   ).length;
   console.log(totalArrivalsToday.length, totalDeparturesToday);
 
   const totalInHouseGuests = guests.filter(
-    (guest) => guest.inHouse === true
+    (guest) => guest.inHouse === true,
   ).length;
 
   const totalOccupancyPercentage =
@@ -46,12 +44,12 @@ function MainUi({
 
   const totalAdultsArrivals = totalArrivalsToday.reduce(
     (acc, guest) => acc + guest.adults,
-    0
+    0,
   );
 
   const totalKidsArrivals = totalArrivalsToday.reduce(
     (acc, guest) => acc + guest.children,
-    0
+    0,
   );
 
   const averagePricePerRoomArrivals =
@@ -70,7 +68,7 @@ function MainUi({
     if (isOpenGuestCard >= 1) {
       // 1. ukloni rezervaciju
       const bookingsUpdated = guests.filter(
-        (guest) => guest.id !== isOpenGuestCard
+        (guest) => guest.id !== isOpenGuestCard,
       );
       setGuests(bookingsUpdated);
 
@@ -613,7 +611,7 @@ function SideShortInfoArrivals({
                   {
                     guests.filter(
                       (guest) =>
-                        guest.arrivalDate === date && guest.inHouse === false
+                        guest.arrivalDate === date && guest.inHouse === false,
                     ).length
                   }{" "}
                   /{" "}
@@ -685,7 +683,7 @@ function GuestsArrivalToday({
 
   function handleEditGuestBooking() {
     const BookingToBeEdited = guests.filter(
-      (guest) => guest.id === isOpenGuestCard
+      (guest) => guest.id === isOpenGuestCard,
     );
     setSelectedBookingEdit(BookingToBeEdited);
     setEditGuestBooking((prev) => !prev);
@@ -694,7 +692,7 @@ function GuestsArrivalToday({
   function handleCheckGuestIn() {
     setGuestCheckedIn((prev) => !prev);
     const updatedGuestsAfterCheckIn = guests.map((guest) =>
-      guest.id === isOpen ? { ...guest, inHouse: true } : guest
+      guest.id === isOpen ? { ...guest, inHouse: true } : guest,
     );
     setGuests(updatedGuestsAfterCheckIn);
   }
@@ -712,7 +710,7 @@ function GuestsArrivalToday({
       {showAllArrivals === false
         ? guests
             .filter(
-              (guest) => guest.arrivalDate === date && guest.inHouse === false
+              (guest) => guest.arrivalDate === date && guest.inHouse === false,
             )
             .map((guest) => (
               <div
