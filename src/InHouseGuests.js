@@ -1,7 +1,32 @@
 import { useState } from "react";
+import UpdatingBookingInfo from "./UpdatingBookingInfo";
 
-export function InHouseGuests({ guests }) {
+export function InHouseGuests({
+  guests,
+  setGuests,
+  setGuestCheckedOut,
+  setEditGuestBooking,
+  editGuestBooking,
+  formatedDate,
+}) {
   const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
+  const [selectedBookingEdit, setSelectedBookingEdit] = useState([]);
+
+  function handleEarlyCheckOut() {
+    const InHouseGuestsAfterEarlyCheckOut = guests.filter(
+      (guest) => isOpenGuestCard !== guest.id
+    );
+    setGuests(InHouseGuestsAfterEarlyCheckOut);
+    setGuestCheckedOut(true);
+  }
+
+  function handleEditGuestBooking() {
+    const BookingToBeEdited = guests.filter(
+      (guest) => guest.id === isOpenGuestCard
+    );
+    setSelectedBookingEdit(BookingToBeEdited);
+    setEditGuestBooking(true);
+  }
 
   function handleOnClickOpenGuestCard(id) {
     console.log(id);
@@ -9,7 +34,15 @@ export function InHouseGuests({ guests }) {
     else setIsOpenGuestCard(id);
   }
 
-  return (
+  return editGuestBooking ? (
+    <UpdatingBookingInfo
+      setEditGuestBooking={setEditGuestBooking}
+      selectedBookingEdit={selectedBookingEdit}
+      setSelectedBookingEdit={setSelectedBookingEdit}
+      guests={guests}
+      setGuests={setGuests}
+    />
+  ) : (
     <div className="guest-flex">
       {guests
         .filter((guest) => guest.inHouse === true)
@@ -29,8 +62,8 @@ export function InHouseGuests({ guests }) {
                 <h3>{guest.firstName + " " + guest.lastName}</h3>
               </div>
               <div className="center-el">
-                <h3>{guest.arrivalDate}</h3>
-                <h3>{guest.departureDate}</h3>
+                <h3>{formatedDate(guest.arrivalDate)}</h3>
+                <h3>{formatedDate(guest.departureDate)}</h3>
               </div>
               <div className="center-el">
                 <h3>Agent</h3>
@@ -45,7 +78,6 @@ export function InHouseGuests({ guests }) {
                 <h3>{guest.price} €</h3>
               </div>
             </div>
-
             {isOpenGuestCard === guest.id && (
               <div className="guest-card-open">
                 <ul>
@@ -67,12 +99,15 @@ export function InHouseGuests({ guests }) {
                     <strong>Preis:</strong> {guest.price}€
                   </li>
                   <li>
-                    <strong>Datum:</strong> {guest.arrivalDate} /{" "}
-                    {guest.departureDate}
+                    <strong>Datum:</strong> {formatedDate(guest.arrivalDate)} /{" "}
+                    {formatedDate(guest.departureDate)}
                   </li>
                 </ul>
                 <div className="checkmarks">
-                  <button className="guest-card-btn">
+                  <button
+                    onClick={handleEditGuestBooking}
+                    className="guest-card-btn"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -103,7 +138,10 @@ export function InHouseGuests({ guests }) {
                     </svg>
                   </button>
 
-                  <button className="guest-card-btn">
+                  <button
+                    onClick={handleEarlyCheckOut}
+                    className="guest-card-btn"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"

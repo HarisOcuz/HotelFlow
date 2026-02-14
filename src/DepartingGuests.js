@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { EditingGuestBooking } from "./EditingGuestBooking";
 import { todaysDate } from "./todaysDate";
+import UpdatingBookingInfo from "./UpdatingBookingInfo";
 
 const date = new Date().toISOString().split("T")[0];
 
@@ -8,8 +10,12 @@ export function DepartingGuests({
   setGuests,
   setGuestCheckedOut,
   guestsCheckedOut,
+  editGuestBooking,
+  setEditGuestBooking,
+  formatedDate,
 }) {
   const [isOpenGuestCard, setIsOpenGuestCard] = useState(null);
+  const [selectedBookingEdit, setSelectedBookingEdit] = useState([]);
 
   function handleOnClickOpenGuestCard(id) {
     console.log(id);
@@ -21,10 +27,24 @@ export function DepartingGuests({
     setGuestCheckedOut(true);
   }
 
-  return (
+  function handleEditGuestBooking() {
+    const BookingToBeEdited = guests.filter(
+      (guest) => guest.id === isOpenGuestCard
+    );
+    setSelectedBookingEdit(BookingToBeEdited);
+    setEditGuestBooking(true);
+  }
+
+  return editGuestBooking ? (
+    <UpdatingBookingInfo
+      selectedBookingEdit={selectedBookingEdit}
+      setGuests={setGuests}
+      setEditGuestBooking={setEditGuestBooking}
+    />
+  ) : (
     <div className="guest-flex">
       {guests
-        .filter((guest) => guest.departureDate === todaysDate(date))
+        .filter((guest) => guest.departureDate === date)
         .map((guest) => (
           <div
             key={guest.id}
@@ -41,8 +61,8 @@ export function DepartingGuests({
                 <h3>{guest.firstName + " " + guest.lastName}</h3>
               </div>
               <div className="center-el">
-                <h3>{guest.arrivalDate}</h3>
-                <h3>{guest.departureDate}</h3>
+                <h3>{formatedDate(guest.arrivalDate)}</h3>
+                <h3>{formatedDate(guest.departureDate)}</h3>
               </div>
               <div className="center-el">
                 <h3>Agent</h3>
@@ -79,14 +99,15 @@ export function DepartingGuests({
                     <strong>Preis:</strong> {guest.price}€
                   </li>
                   <li>
-                    <strong>Datum:</strong> {guest.arrivalDate} /{" "}
-                    {guest.departureDate}
+                    <strong>Datum:</strong> {formatedDate(guest.arrivalDate)} /{" "}
+                    {formatedDate(guest.departureDate)}
                   </li>
                 </ul>
                 <div className="checkmarks">
-                  {/* //! HERE TO ADD FUNCTION TO EDIT THE BOOKING / EXTEND BOOKING */}
-
-                  <button className="guest-card-btn">
+                  <button
+                    className="guest-card-btn"
+                    onClick={handleEditGuestBooking}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"

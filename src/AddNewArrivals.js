@@ -31,16 +31,6 @@ function AddNewArrival({
   const diffTime = departure - arrival;
   const totalNights = diffTime / (1000 * 60 * 60 * 24);
 
-  // Formatting the output date
-
-  // function formatedDate(date) {
-  //   const d = new Date(date);
-  //   const day = String(d.getDate()).padStart(2, "0");
-  //   const month = String(d.getMonth() + 1).padStart(2, "0"); // mjeseci od 0
-  //   const year = d.getFullYear();
-  //   return `${day}.${month}.${year}`;
-  // }
-
   function handleSetLastName(e) {
     setLastName(e.target.value);
   }
@@ -80,10 +70,11 @@ function AddNewArrival({
         children,
         bookingAgent: agent,
         price,
-        arrivalDate: formatedDate(arrivalDate),
-        departureDate: formatedDate(departureDate),
+        arrivalDate: arrivalDate,
+        departureDate: departureDate,
         inHouse: false,
         roomType: roomType,
+        id: crypto.randomUUID,
       };
 
       onAddGuest(newGuest);
@@ -104,6 +95,7 @@ function AddNewArrival({
 
   function handleSetArrivalDate(e) {
     const selectedDate = e.target.value;
+    console.log(e.target.value);
     // const guestDateFinal = new Date(guestDate).toLocaleDateString("de-DE");
 
     if (selectedDate < date) return;

@@ -3,9 +3,10 @@ import { todaysDate } from "./todaysDate";
 import { DepartingGuests } from "./DepartingGuests";
 import { InHouseGuests } from "./InHouseGuests";
 import { ChangeNotification } from "./ChangeNotification";
+import UpdatingBookingInfo from "./UpdatingBookingInfo";
 
+// ! TODAYS DATE IN ISO FORMAT
 const date = new Date().toISOString().split("T")[0];
-console.log(date);
 
 function MainUi({
   setAuthStatus,
@@ -13,6 +14,7 @@ function MainUi({
   setAddNewArrivalBtn,
   guests,
   setGuests,
+  formatedDate,
 }) {
   const [siteOpen, setSiteOpen] = useState("");
   const [showAllArrivals, setShowAllArrivals] = useState(false);
@@ -21,30 +23,35 @@ function MainUi({
   const [bookingCanceled, setBookingCanceled] = useState(null);
   const [guestCheckedIn, setGuestCheckedIn] = useState(null);
   const [guestCheckedOut, setGuestCheckedOut] = useState(false);
+  const [editGuestBooking, setEditGuestBooking] = useState(false);
+
+  function handleEditGuestBooking() {}
 
   // ! Stats for  today (In house, arrivals, departures)
   const totalArrivalsToday = guests.filter(
-    (guest) =>
-      guest.arrivalDate === todaysDate(date) && guest.inHouse === false,
+    (guest) => guest.arrivalDate === date && guest.inHouse === false
   );
 
   const totalDeparturesToday = guests.filter(
-    (guest) => guest.departureDate === todaysDate(date),
+    (guest) => guest.departureDate === date
   ).length;
   console.log(totalArrivalsToday.length, totalDeparturesToday);
 
   const totalInHouseGuests = guests.filter(
-    (guest) => guest.inHouse === true,
+    (guest) => guest.inHouse === true
   ).length;
+
+  const totalOccupancyPercentage =
+    ((totalArrivalsToday.length + totalInHouseGuests) / 12) * 100;
 
   const totalAdultsArrivals = totalArrivalsToday.reduce(
     (acc, guest) => acc + guest.adults,
-    0,
+    0
   );
 
   const totalKidsArrivals = totalArrivalsToday.reduce(
     (acc, guest) => acc + guest.children,
-    0,
+    0
   );
 
   const averagePricePerRoomArrivals =
@@ -63,7 +70,7 @@ function MainUi({
     if (isOpenGuestCard >= 1) {
       // 1. ukloni rezervaciju
       const bookingsUpdated = guests.filter(
-        (guest) => guest.id !== isOpenGuestCard,
+        (guest) => guest.id !== isOpenGuestCard
       );
       setGuests(bookingsUpdated);
 
@@ -107,13 +114,18 @@ function MainUi({
         <NavBar />
         {siteOpen === "" ? (
           <MainWindowShortInfo
+            formatedDate={formatedDate}
             totalArrivalsToday={totalArrivalsToday}
             totalDeparturesToday={totalDeparturesToday}
             totalInHouseGuests={totalInHouseGuests}
             setSiteOpen={setSiteOpen}
+            totalOccupancyPercentage={totalOccupancyPercentage}
           />
         ) : siteOpen === "Anreisen" ? (
           <Arrivals
+            editGuestBooking={editGuestBooking}
+            setEditGuestBooking={setEditGuestBooking}
+            formatedDate={formatedDate}
             guestCheckedIn={guestCheckedIn}
             setGuestCheckedIn={setGuestCheckedIn}
             setBookingCanceled={setBookingCanceled}
@@ -148,9 +160,22 @@ function MainUi({
             setIsOpenGuestCard={setIsOpenGuestCard}
             guestCheckedOut={guestCheckedOut}
             setGuestCheckedOut={setGuestCheckedOut}
+            editGuestBooking={editGuestBooking}
+            setEditGuestBooking={setEditGuestBooking}
+            formatedDate={formatedDate}
           />
         ) : siteOpen === "Im Haus" ? (
-          <InHaus guests={guests} />
+          <InHaus
+            formatedDate={formatedDate}
+            editGuestBooking={editGuestBooking}
+            setEditGuestBooking={setEditGuestBooking}
+            isOpenGuestCard={isOpenGuestCard}
+            setIsOpenGuestCard={setIsOpenGuestCard}
+            guests={guests}
+            setGuests={setGuests}
+            guestCheckedOut={guestCheckedOut}
+            setGuestCheckedOut={setGuestCheckedOut}
+          />
         ) : siteOpen === "Zimmer Management" ? (
           <RoomMenagamenet />
         ) : siteOpen === "Mitarbeiter" ? (
@@ -344,6 +369,7 @@ function MainWindowShortInfo({
   totalArrivalsToday,
   totalDeparturesToday,
   totalInHouseGuests,
+  totalOccupancyPercentage,
 }) {
   return (
     <div className="mainWindow-container">
@@ -369,7 +395,7 @@ function MainWindowShortInfo({
         setSiteOpen={setSiteOpen}
         className="mainWindow-short-info "
         text="Belegt"
-        nummer="39%"
+        nummer={`${totalOccupancyPercentage.toFixed(1)}%`}
       />
     </div>
   );
@@ -404,11 +430,13 @@ function Arrivals({
   setGuestCheckedIn,
   totalAdults,
   totalAdultsArrivals,
-  totalArrivalsToday,
   totalKids,
   totalKidsArrivals,
   averagePricePerRoom,
   averagePricePerRoomArrivals,
+  formatedDate,
+  setEditGuestBooking,
+  editGuestBooking,
 }) {
   function handleAddNewArrivalBtn() {
     setAddNewArrivalBtn(true);
@@ -450,6 +478,10 @@ function Arrivals({
 
       <div className="ui-container arrivals-container">
         <GuestsArrivalToday
+          isOpenGuestCard={isOpenGuestCard}
+          editGuestBooking={editGuestBooking}
+          setEditGuestBooking={setEditGuestBooking}
+          formatedDate={formatedDate}
           setGuests={setGuests}
           onClick={handleOnClickOpenGuestCard}
           isOpen={isOpenGuestCard}
@@ -581,16 +613,11 @@ function SideShortInfoArrivals({
                   {
                     guests.filter(
                       (guest) =>
-                        guest.arrivalDate === todaysDate(date) &&
-                        guest.inHouse === false,
+                        guest.arrivalDate === date && guest.inHouse === false
                     ).length
                   }{" "}
                   /{" "}
-                  {
-                    guests.filter(
-                      (guest) => guest.arrivalDate === todaysDate(date),
-                    ).length
-                  }
+                  {guests.filter((guest) => guest.arrivalDate === date).length}
                 </span>
               </div>
               <div className="side-short-info">
@@ -649,28 +676,43 @@ function GuestsArrivalToday({
   setGuests,
   handleCancelGuestBooking,
   setGuestCheckedIn,
+  formatedDate,
+  setEditGuestBooking,
+  editGuestBooking,
+  isOpenGuestCard,
 }) {
-  console.log(showAllArrivals);
+  const [selectedBookingEdit, setSelectedBookingEdit] = useState([]);
+
+  function handleEditGuestBooking() {
+    const BookingToBeEdited = guests.filter(
+      (guest) => guest.id === isOpenGuestCard
+    );
+    setSelectedBookingEdit(BookingToBeEdited);
+    setEditGuestBooking((prev) => !prev);
+  }
 
   function handleCheckGuestIn() {
-    console.log("radi");
-
     setGuestCheckedIn((prev) => !prev);
-
     const updatedGuestsAfterCheckIn = guests.map((guest) =>
-      guest.id === isOpen ? { ...guest, inHouse: true } : guest,
+      guest.id === isOpen ? { ...guest, inHouse: true } : guest
     );
     setGuests(updatedGuestsAfterCheckIn);
   }
 
-  return (
+  return editGuestBooking ? (
+    <UpdatingBookingInfo
+      setEditGuestBooking={setEditGuestBooking}
+      selectedBookingEdit={selectedBookingEdit}
+      setSelectedBookingEdit={setSelectedBookingEdit}
+      guests={guests}
+      setGuests={setGuests}
+    />
+  ) : (
     <div className="guest-flex">
       {showAllArrivals === false
         ? guests
             .filter(
-              (guest) =>
-                guest.arrivalDate === todaysDate(date) &&
-                guest.inHouse === false,
+              (guest) => guest.arrivalDate === date && guest.inHouse === false
             )
             .map((guest) => (
               <div
@@ -689,8 +731,8 @@ function GuestsArrivalToday({
                     <h3>{guest.firstName + " " + guest.lastName}</h3>
                   </div>
                   <div className="center-el">
-                    <h3>{guest.arrivalDate}</h3>
-                    <h3>{guest.departureDate}</h3>
+                    <h3>{formatedDate(guest.arrivalDate)}</h3>
+                    <h3>{formatedDate(guest.departureDate)}</h3>
                   </div>
                   <div className="center-el">
                     <h3>Agent</h3>
@@ -730,7 +772,8 @@ function GuestsArrivalToday({
                       </li>
                       <li>
                         <strong>Datum:</strong>
-                        {guest.arrivalDate} / {guest.departureDate}
+                        {formatedDate(guest.arrivalDate)} /{" "}
+                        {formatedDate(guest.departureDate)}
                       </li>
                     </ul>
                     <div className="checkmarks">
@@ -792,8 +835,8 @@ function GuestsArrivalToday({
                   <h3>{guest.firstName + " " + guest.lastName}</h3>
                 </div>
                 <div className="center-el">
-                  <h3>{guest.arrivalDate}</h3>
-                  <h3>{guest.departureDate}</h3>
+                  <h3>{formatedDate(guest.arrivalDate)}</h3>
+                  <h3>{formatedDate(guest.departureDate)}</h3>
                 </div>
                 <div className="center-el">
                   <h3>Agent</h3>
@@ -833,11 +876,15 @@ function GuestsArrivalToday({
                     </li>
                     <li>
                       <strong>Datum:</strong>
-                      {guest.arrivalDate} / {guest.departureDate}
+                      {formatedDate(guest.arrivalDate)} /{" "}
+                      {formatedDate(guest.departureDate)}
                     </li>
                   </ul>
                   <div className="checkmarks">
-                    <button className="guest-card-btn">
+                    <button
+                      className="guest-card-btn"
+                      onClick={handleEditGuestBooking}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -902,17 +949,23 @@ function Departures({
   guestCheckedOut,
   setGuestCheckedOut,
   isOpenGuestCard,
+  setEditGuestBooking,
+  editGuestBooking,
+  formatedDate,
 }) {
   // ! Checking guests out
 
   return (
     <div className="ui-container departure-container">
       <DepartingGuests
+        formatedDate={formatedDate}
         handleOnClickOpenGuestCard={handleOnClickOpenGuestCard}
         guests={guests}
         setGuests={setGuests}
         guestCheckedOut={guestCheckedOut}
         setGuestCheckedOut={setGuestCheckedOut}
+        setEditGuestBooking={setEditGuestBooking}
+        editGuestBooking={editGuestBooking}
       />
       {guestCheckedOut && (
         <ChangeNotification
@@ -924,10 +977,41 @@ function Departures({
   );
 }
 
-function InHaus({ guests }) {
+function InHaus({
+  guests,
+  setGuests,
+  guestCheckedOut,
+  setGuestCheckedOut,
+  isOpenGuestCard,
+  setIsOpenGuestCard,
+  editGuestBooking,
+  setEditGuestBooking,
+  formatedDate,
+}) {
   return (
     <div className="ui-container in-house-container">
-      <InHouseGuests guests={guests} />
+      {guestCheckedOut && (
+        <ChangeNotification
+          children={"Gast vorzeitig abgereist"}
+          onClose={() => setGuestCheckedOut((prev) => !prev)}
+        />
+      )}
+      <InHouseGuests
+        formatedDate={formatedDate}
+        setGuestCheckedOut={setGuestCheckedOut}
+        setEditGuestBooking={setEditGuestBooking}
+        editGuestBooking={editGuestBooking}
+        setGuests={setGuests}
+        guests={guests}
+      />
+      {/* <UpdatingBookingInfo
+        guests={guests}
+        setEditGuestBooking={setEditGuestBooking}
+        isOpenGuestCard={isOpenGuestCard}
+        setIsOpenGuestCard={setIsOpenGuestCard}
+        setEditGuestBooking={setEditGuestBooking}
+        editGuestBooking={editGuestBooking}
+      /> */}
     </div>
   );
 }
