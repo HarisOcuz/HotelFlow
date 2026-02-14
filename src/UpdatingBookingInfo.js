@@ -188,8 +188,6 @@ function UpdatingBookingInfo({
       </div>
     </>
   );
-
-  console.log(firstName);
 }
 
 export default UpdatingBookingInfo;
