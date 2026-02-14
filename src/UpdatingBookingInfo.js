@@ -1,8 +1,6 @@
 import { EditingGuestBooking } from "./EditingGuestBooking";
 import { useState } from "react";
 
-const date = new Date().toISOString().split("T")[0];
-
 function UpdatingBookingInfo({
   setEditGuestBooking,
   selectedBookingEdit,
