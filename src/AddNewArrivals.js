@@ -1,8 +1,6 @@
 import { useState } from "react";
-// import MainUi from "./mainUI";
 
 const date = new Date().toISOString().split("T")[0];
-// const todaysDate = date.toLocaleDateString("de-DE"); // Europski format
 
 console.log(typeof date);
 

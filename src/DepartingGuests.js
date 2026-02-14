@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { EditingGuestBooking } from "./EditingGuestBooking";
-import { todaysDate } from "./todaysDate";
 import UpdatingBookingInfo from "./UpdatingBookingInfo";
 
 const date = new Date().toISOString().split("T")[0];
@@ -29,7 +27,7 @@ export function DepartingGuests({
 
   function handleEditGuestBooking() {
     const BookingToBeEdited = guests.filter(
-      (guest) => guest.id === isOpenGuestCard
+      (guest) => guest.id === isOpenGuestCard,
     );
     setSelectedBookingEdit(BookingToBeEdited);
     setEditGuestBooking(true);
