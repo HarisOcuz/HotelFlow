@@ -8,6 +8,16 @@ function UpdatingBookingInfo({
   selectedBookingEdit,
   setGuests,
 }) {
+  const [editedFirstName, setEditedFirstName] = useState(firstName);
+  const [editedLastName, setEditedLastName] = useState(lastName);
+  const [editedAdults, setEditedAdults] = useState(adults);
+  const [editedChildren, setEditedChildren] = useState(children);
+  const [editedBookingAgent, setEditedBookingAgent] = useState(bookingAgent);
+  const [editedPrice, setEditedPrice] = useState(price);
+  const [editedRoomType, setEditedRoomType] = useState(roomType);
+  const [editedArrivalDate, setEditedArrivalDate] = useState(arrivalDate);
+  const [editedDepartureDate, setEditedDepartureDate] = useState(departureDate);
+
   if (!selectedBookingEdit) return null;
 
   const [
@@ -26,21 +36,11 @@ function UpdatingBookingInfo({
     },
   ] = selectedBookingEdit;
 
-  const [editedFirstName, setEditedFirstName] = useState(firstName);
-  const [editedLastName, setEditedLastName] = useState(lastName);
-  const [editedAdults, setEditedAdults] = useState(adults);
-  const [editedChildren, setEditedChildren] = useState(children);
-  const [editedBookingAgent, setEditedBookingAgent] = useState(bookingAgent);
-  const [editedPrice, setEditedPrice] = useState(price);
-  const [editedRoomType, setEditedRoomType] = useState(roomType);
-  const [editedArrivalDate, setEditedArrivalDate] = useState(arrivalDate);
-  const [editedDepartureDate, setEditedDepartureDate] = useState(departureDate);
-
   const arrival = new Date(editedArrivalDate);
   const departure = new Date(editedDepartureDate);
   const totalNights = Math.max(
     0,
-    Math.round((departure - arrival) / (1000 * 60 * 60 * 24))
+    Math.round((departure - arrival) / (1000 * 60 * 60 * 24)),
   );
 
   function handleEditedGuestData() {
